@@ -1,44 +1,43 @@
-﻿using eDocCore.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using eDocCore.Domain.Entities;
 
-namespace eDocCore.Infrastructure.Persistence
+namespace eDocCore.Infrastructure.Persistence;
+
+public partial class ApplicationDbContext : DbContext
 {
-    public class ApplicationDbContext : DbContext
+    public ApplicationDbContext()
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-        }
-
-        public DbSet<Document> Documents { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            base.OnModelCreating(modelBuilder);
-        }
-
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-            foreach (var entry in ChangeTracker.Entries<BaseEntity>())
-            {
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        entry.Entity.CreatedDate = DateTime.UtcNow;
-                        break;
-                    case EntityState.Modified:
-                        entry.Entity.ModifiedDate = DateTime.UtcNow;
-                        break;
-                }
-            }
-            return base.SaveChangesAsync(cancellationToken);
-        }
     }
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+    {
+    }
+
+    public virtual DbSet<User> Users { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.;Database=eDocCoreDB;User Id=sa;Password=Matkhau1;TrustServerCertificate=True;");
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.FullName).HasMaxLength(255);
+            entity.Property(e => e.LoginName)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+        });
+
+        OnModelCreatingPartial(modelBuilder);
+    }
+
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

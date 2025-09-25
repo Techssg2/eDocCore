@@ -21,6 +21,7 @@ namespace eDocCore.Infrastructure
             // Đăng ký Repositories
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IDocumentRepository, DocumentRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             // Đăng ký các dịch vụ khác
             services.AddTransient<IEmailService, EmailService>();

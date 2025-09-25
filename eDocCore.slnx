@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/(Core) Dynamic Link Library/" />
+  <Folder Name="/Solution Items/">
+    <File Path="Readme.md" />
+  </Folder>
   <Project Path="eDocCore.API/eDocCore.API.csproj" />
   <Project Path="eDocCore.Application/eDocCore.Application.csproj" />
   <Project Path="eDocCore.Domain/eDocCore.Domain.csproj" />
