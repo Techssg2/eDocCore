@@ -8,5 +8,6 @@ namespace eDocCore.Domain.Interfaces
     public interface IRoleRepository : IGenericRepository<Role>
     {
         // Thêm các method ??c thù cho Role n?u c?n
+        Task<bool> ExistsByNameAsync(string name);
     }
 }

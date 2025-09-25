@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace eDocCore.Infrastructure.Persistence.Repositories
 {
@@ -12,6 +13,10 @@ namespace eDocCore.Infrastructure.Persistence.Repositories
         public RoleRepository(ApplicationDbContext context) : base(context)
         {
         }
-        // Thêm các method ??c thù cho Role n?u c?n
+        public async Task<bool> ExistsByNameAsync(string name)
+        {
+            return await _context.Set<Role>()
+                .AnyAsync(r => r.Name.ToLower() == name.ToLower());
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -24,6 +25,13 @@ namespace eDocCore.Application.Features.Roles.Handlers
             await _unitOfWork.BeginTransactionAsync();
             try
             {
+                // Ki?m tra trùng tên role
+                var existingRoles = await _roleRepository.GetAllAsync();
+                if (existingRoles.Any(r => r.Name.Equals(request.Name, StringComparison.OrdinalIgnoreCase)))
+                {
+                    throw new InvalidOperationException($"Role name '{request.Name}' already exists.");
+                }
+
                 var role = new Role { Name = request.Name };
                 var createdRole = await _roleRepository.AddAsync(role);
                 await _unitOfWork.CommitAsync();
