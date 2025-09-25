@@ -1,0 +1,9 @@
+using eDocCore.Domain.Entities;
+
+namespace eDocCore.Domain.Entities
+{
+    public partial class Role : BaseEntity
+    {
+        // Không c?n khai báo l?i property, ch? m? r?ng k? th?a
+    }
+}

@@ -1,4 +1,5 @@
 ﻿using eDocCore.Application.Interfaces;
+using eDocCore.Domain.Entities;
 using eDocCore.Domain.Interfaces;
 using eDocCore.Infrastructure.Persistence;
 using eDocCore.Infrastructure.Persistence.Repositories;
@@ -13,21 +14,21 @@ namespace eDocCore.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            // Cấu hình DbContext
+            // Cấu hình DbContext cho Database First (không dùng migrations)
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-            // Đăng ký Repositories
+            // Đăng ký Generic Repository cho tất cả entities
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddScoped<IDocumentRepository, DocumentRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Đăng ký các dịch vụ khác
             services.AddTransient<IEmailService, EmailService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IDocumentRepository, DocumentRepository>();
 
             return services;
         }
     }
-
 }
