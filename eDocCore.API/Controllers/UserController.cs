@@ -1,7 +1,8 @@
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using eDocCore.Application.Users.Commands;
 using eDocCore.Application.Users.Queries;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eDocCore.API.Controllers
 {
@@ -15,8 +16,12 @@ namespace eDocCore.API.Controllers
             _mediator = mediator;
         }
 
-        // GET: /User
+        /// <summary>
+        /// Lấy danh sách User
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _mediator.Send(new GetUsersQuery());
