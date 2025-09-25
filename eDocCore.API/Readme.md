@@ -1,0 +1,1 @@
+﻿Trách nhiệm: Là điểm vào (entry point) của ứng dụng, xử lý các request HTTP. Phụ thuộc vào eDocCore.Infrastructure và eDocCore.Application.
