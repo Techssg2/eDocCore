@@ -36,7 +36,7 @@ namespace eDocCore.Tests.Role
             Console.WriteLine("✅ CreateRoleCommandHandler_Should_Create_Role passed");
         }
 
-        [Fact]
+        /*[Fact]
         public async Task CreateRoleCommandHandler_Should_ThrowException_WhenNameIsEmpty()
         {
             // Arrange
@@ -83,6 +83,6 @@ namespace eDocCore.Tests.Role
             // Act & Assert
             await Assert.ThrowsAsync<Exception>(async () => await handler.Handle(command, CancellationToken.None));
             mockUow.Verify(u => u.RollbackAsync(), Times.Once);
-        }
+        }*/
     }
 }

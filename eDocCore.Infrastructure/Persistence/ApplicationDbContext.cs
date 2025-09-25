@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using eDocCore.Domain.Entities;
 
-namespace eDocCore.Domain.Entities;
+namespace eDocCore.Infrastructure.Persistence;
 
 public partial class ApplicationDbContext : DbContext
 {

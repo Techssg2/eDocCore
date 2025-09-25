@@ -20,6 +20,9 @@ namespace eDocCore.Infrastructure.Persistence.Repositories
 
         public async Task<T> AddAsync(T entity)
         {
+            if (entity.Id == Guid.Empty)
+                entity.Id = Guid.NewGuid();
+
             entity.Created = DateTime.Now;
             entity.Modified = DateTime.Now;
             await _context.Set<T>().AddAsync(entity);

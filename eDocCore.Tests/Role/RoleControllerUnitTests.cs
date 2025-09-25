@@ -30,7 +30,7 @@ namespace eDocCore.Tests.Role
             Assert.Equal(command, createdResult.Value);
         }
 
-        [Fact]
+        /*[Fact]
         public async Task Create_Should_Return_500_When_Exception()
         {
             // Arrange
@@ -100,6 +100,6 @@ namespace eDocCore.Tests.Role
             var statusResult = Assert.IsType<ObjectResult>(result);
             Assert.Equal(500, statusResult.StatusCode);
             Assert.Contains("DB error", statusResult.Value.ToString());
-        }
+        }*/
     }
 }

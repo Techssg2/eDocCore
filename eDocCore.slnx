@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/(Core) Dynamic Link Library/" />
-  <Folder Name="/Test/">
+  <Folder Name="/Unit Test/">
     <Project Path="eDocCore.Tests/eDocCore.Tests.csproj" Id="b7f488ff-ff5f-4893-88d2-c36203d4e076" />
   </Folder>
   <Project Path="eDocCore.API/eDocCore.API.csproj" />
