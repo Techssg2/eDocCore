@@ -24,10 +24,10 @@ namespace eDocCore.Application.Roles.Handlers
             await _unitOfWork.BeginTransactionAsync();
             try
             {
-                var role = new Role { Id = Guid.NewGuid(), Name = request.Name };
-                await _roleRepository.AddAsync(role);
+                var role = new Role { Name = request.Name };
+                var createdRole = await _roleRepository.AddAsync(role);
                 await _unitOfWork.CommitAsync();
-                return role.Id;
+                return createdRole.Id;
             }
             catch
             {

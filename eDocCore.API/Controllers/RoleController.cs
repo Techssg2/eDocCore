@@ -21,8 +21,15 @@ namespace eDocCore.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateRoleCommand command)
         {
-            var id = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetById), new { id }, command);
+            try
+            {
+                var id = await _mediator.Send(command);
+                return CreatedAtAction(nameof(GetById), new { id }, command);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error creating role: {ex.InnerException}");
+            }
         }
 
         [HttpPut("{id}")]

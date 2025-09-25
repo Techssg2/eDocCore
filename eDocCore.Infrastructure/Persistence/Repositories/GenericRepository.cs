@@ -20,6 +20,8 @@ namespace eDocCore.Infrastructure.Persistence.Repositories
 
         public async Task<T> AddAsync(T entity)
         {
+            entity.Created = DateTime.Now;
+            entity.Modified = DateTime.Now;
             await _context.Set<T>().AddAsync(entity);
             await _context.SaveChangesAsync();
             return entity;
@@ -43,6 +45,7 @@ namespace eDocCore.Infrastructure.Persistence.Repositories
 
         public async Task UpdateAsync(T entity)
         {
+            entity.Modified = DateTime.Now;
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

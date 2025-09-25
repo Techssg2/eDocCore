@@ -12,7 +12,7 @@ namespace eDocCore.Domain.Entities
     public abstract class BaseEntity
     {
         public Guid Id { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime? ModifiedDate { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime? Modified { get; set; }
     }
 }
