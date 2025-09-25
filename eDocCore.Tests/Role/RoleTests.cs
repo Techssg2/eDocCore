@@ -1,11 +1,11 @@
 ﻿using Xunit;
-using eDocCore.Application.Roles.Commands;
-using eDocCore.Application.Roles.Handlers;
 using Moq;
 using eDocCore.Domain.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
+using eDocCore.Application.Features.Roles.Handlers;
+using eDocCore.Application.Features.Roles.Commands;
 
 namespace eDocCore.Tests.Role
 {

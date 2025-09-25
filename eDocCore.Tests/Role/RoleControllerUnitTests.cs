@@ -4,8 +4,8 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using eDocCore.API.Controllers;
-using eDocCore.Application.Roles.Commands;
 using MediatR;
+using eDocCore.Application.Features.Roles.Commands;
 
 namespace eDocCore.Tests.Role
 {

@@ -1,5 +1,5 @@
-using eDocCore.Application.Roles.Commands;
-using eDocCore.Application.Roles.Queries;
+using eDocCore.Application.Features.Roles.Commands;
+using eDocCore.Application.Features.Roles.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;

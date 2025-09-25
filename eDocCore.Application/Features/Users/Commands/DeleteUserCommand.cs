@@ -1,7 +1,7 @@
 using MediatR;
 using System;
 
-namespace eDocCore.Application.Users.Commands
+namespace eDocCore.Application.Features.Users.Commands
 {
     public class DeleteUserCommand : IRequest<bool>
     {

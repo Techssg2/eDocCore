@@ -2,11 +2,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using eDocCore.Application.Roles.Commands;
 using eDocCore.Domain.Interfaces;
 using eDocCore.Domain.Entities;
+using eDocCore.Application.Features.Roles.Commands;
 
-namespace eDocCore.Application.Roles.Handlers
+namespace eDocCore.Application.Features.Roles.Handlers
 {
     public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, bool>
     {

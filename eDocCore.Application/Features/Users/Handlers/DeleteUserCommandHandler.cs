@@ -1,9 +1,9 @@
 using MediatR;
-using eDocCore.Application.Users.Commands;
 using eDocCore.Domain.Interfaces;
 using eDocCore.Domain.Entities;
+using eDocCore.Application.Features.Users.Commands;
 
-namespace eDocCore.Application.Users.Handlers
+namespace eDocCore.Application.Features.Users.Handlers
 {
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, bool>
     {

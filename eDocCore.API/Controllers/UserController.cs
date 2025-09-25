@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using eDocCore.Application.Users.Commands;
-using eDocCore.Application.Users.Queries;
 using Microsoft.AspNetCore.Authorization;
+using eDocCore.Application.Features.Users.Commands;
+using eDocCore.Application.Features.Users.Queries;
 
 namespace eDocCore.API.Controllers
 {

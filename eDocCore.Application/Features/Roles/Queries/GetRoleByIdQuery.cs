@@ -2,7 +2,7 @@ using System;
 using MediatR;
 using eDocCore.Domain.Entities;
 
-namespace eDocCore.Application.Roles.Queries
+namespace eDocCore.Application.Features.Roles.Queries
 {
     public class GetRoleByIdQuery : IRequest<Role?>
     {

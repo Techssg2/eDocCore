@@ -1,11 +1,11 @@
 using Xunit;
-using eDocCore.Application.Users.Commands;
-using eDocCore.Application.Users.Handlers;
 using Moq;
 using eDocCore.Domain.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
+using eDocCore.Application.Features.Users.Commands;
+using eDocCore.Application.Features.Users.Handlers;
 
 namespace eDocCore.Tests.User
 {

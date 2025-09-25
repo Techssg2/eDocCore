@@ -1,7 +1,7 @@
 using System;
 using MediatR;
 
-namespace eDocCore.Application.Roles.Commands
+namespace eDocCore.Application.Features.Roles.Commands
 {
     public class UpdateRoleCommand : IRequest<bool>
     {

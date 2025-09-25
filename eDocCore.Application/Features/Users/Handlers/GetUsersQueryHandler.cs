@@ -1,9 +1,9 @@
 using MediatR;
-using eDocCore.Application.Users.Queries;
 using eDocCore.Domain.Interfaces;
 using eDocCore.Domain.Entities;
+using eDocCore.Application.Features.Users.Queries;
 
-namespace eDocCore.Application.Users.Handlers
+namespace eDocCore.Application.Features.Users.Handlers
 {
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, List<User>>
     {

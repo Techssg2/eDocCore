@@ -2,7 +2,7 @@ using System;
 using MediatR;
 using eDocCore.Domain.Entities;
 
-namespace eDocCore.Application.Roles.Commands
+namespace eDocCore.Application.Features.Roles.Commands
 {
     public class CreateRoleCommand : IRequest<Guid>
     {
