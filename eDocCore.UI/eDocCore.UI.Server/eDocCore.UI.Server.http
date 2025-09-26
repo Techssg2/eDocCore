@@ -1,0 +1,6 @@
+@eDocCore.UI.Server_HostAddress = http://localhost:5074
+
+GET {{eDocCore.UI.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
