@@ -1,4 +1,10 @@
-﻿#root {
+﻿@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+body {
+  font-family: 'Roboto', 'Arial', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#root {
     max-width: 1280px;
     margin: 0 auto;
     padding: 2rem;

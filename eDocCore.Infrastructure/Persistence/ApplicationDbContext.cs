@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using eDocCore.Domain.Entities;
 
-namespace eDocCore.Infrastructure.Persistence;
+namespace eDocCore.Domain.Entities;
 
 public partial class ApplicationDbContext : DbContext
 {
@@ -40,12 +39,13 @@ public partial class ApplicationDbContext : DbContext
         {
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Email)
-                .HasMaxLength(50)
+                .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.FullName).HasMaxLength(255);
             entity.Property(e => e.LoginName)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+            entity.Property(e => e.Password).HasMaxLength(255);
         });
 
         modelBuilder.Entity<UserRole>(entity =>

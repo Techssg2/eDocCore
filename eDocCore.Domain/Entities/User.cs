@@ -9,6 +9,8 @@ public partial class User
 
     public string LoginName { get; set; } = null!;
 
+    public string? Password { get; set; }
+
     public string? FullName { get; set; }
 
     public bool? Gender { get; set; }
