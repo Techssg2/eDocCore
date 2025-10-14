@@ -20,7 +20,15 @@ namespace eDocCore.API.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (context.User.Identity?.IsAuthenticated == true)
+            // B? qua m?t s? endpoint công khai nh? swagger/health
+            var path = context.Request.Path.Value ?? string.Empty;
+            if (path.StartsWith("/swagger") || path.StartsWith("/health"))
+            {
+                await _next(context);
+                return;
+            }
+
+            if (context.User.Identity?.IsAuthenticated == true && _allowedRoles.Length > 0)
             {
                 var userRoles = context.User.Claims
                     .Where(c => c.Type == ClaimTypes.Role)

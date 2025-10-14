@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Sdk Name="Aspire.AppHost.Sdk" Version="9.3.0" />
 
@@ -19,7 +19,6 @@
     <ProjectReference Include="..\..\eDocCore.Application\eDocCore.Application.csproj" />
     <ProjectReference Include="..\..\eDocCore.Domain\eDocCore.Domain.csproj" />
     <ProjectReference Include="..\..\eDocCore.Infrastructure\eDocCore.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\eDocCore.UI\edoccore.ui.client\eDocCore.UI.Client.esproj" />
   </ItemGroup>
 
 </Project>

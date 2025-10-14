@@ -4,8 +4,8 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using eDocCore.API.Controllers;
-using MediatR;
-using eDocCore.Application.Features.Roles.Commands;
+using eDocCore.Application.Services;
+using eDocCore.Application.DTOs.Roles;
 
 namespace eDocCore.Tests.Role
 {
@@ -15,91 +15,55 @@ namespace eDocCore.Tests.Role
         public async Task Create_Should_Return_CreatedAtActionResult()
         {
             // Arrange
-            var mockMediator = new Mock<IMediator>();
-            var controller = new RoleController(mockMediator.Object);
-            var command = new CreateRoleCommand { Name = "Admin" };
-            var expectedId = Guid.NewGuid();
+            var mockService = new Mock<IRoleService>();
+            var controller = new RoleController(mockService.Object);
+            var request = new CreateRoleRequest { Name = "Admin", IsActive = true };
+            var created = new RoleDto { Id = Guid.NewGuid(), Name = request.Name, IsActive = request.IsActive };
 
-            mockMediator.Setup(m => m.Send(command, default)).ReturnsAsync(expectedId);
+            mockService.Setup(s => s.CreateAsync(It.IsAny<CreateRoleRequest>())).ReturnsAsync(created);
 
             // Act
-            var result = await controller.Create(command);
+            var result = await controller.Create(request);
 
             // Assert
             var createdResult = Assert.IsType<CreatedAtActionResult>(result);
-            Assert.Equal(command, createdResult.Value);
+            Assert.Equal(created, createdResult.Value);
+            Assert.Equal("GetById", createdResult.ActionName);
         }
 
-        /*[Fact]
+        [Fact]
         public async Task Create_Should_Return_500_When_Exception()
         {
             // Arrange
-            var mockMediator = new Mock<IMediator>();
-            var controller = new RoleController(mockMediator.Object);
-            var command = new CreateRoleCommand { Name = "Admin" };
-            mockMediator.Setup(m => m.Send(command, default)).ThrowsAsync(new Exception("DB error"));
+            var mockService = new Mock<IRoleService>();
+            var controller = new RoleController(mockService.Object);
+            var request = new CreateRoleRequest { Name = "Admin" };
+            mockService.Setup(s => s.CreateAsync(It.IsAny<CreateRoleRequest>())).ThrowsAsync(new Exception("DB error"));
 
             // Act
-            var result = await controller.Create(command);
+            var result = await controller.Create(request);
 
             // Assert
             var statusResult = Assert.IsType<ObjectResult>(result);
             Assert.Equal(500, statusResult.StatusCode);
-            Assert.Contains("DB error", statusResult.Value.ToString());
+            Assert.Contains("DB error", statusResult.Value?.ToString());
         }
 
         [Fact]
-        public async Task Create_Should_Return_500_When_NameIsEmpty()
+        public async Task Create_Should_Return_400_When_InvalidModelState()
         {
             // Arrange
-            var mockMediator = new Mock<IMediator>();
-            var controller = new RoleController(mockMediator.Object);
-            var command = new CreateRoleCommand { Name = "" };
-            mockMediator.Setup(m => m.Send(command, default)).ThrowsAsync(new ArgumentException("Name is required"));
+            var mockService = new Mock<IRoleService>();
+            var controller = new RoleController(mockService.Object);
+            controller.ModelState.AddModelError("Name", "Required");
+            var request = new CreateRoleRequest { Name = string.Empty };
 
             // Act
-            var result = await controller.Create(command);
+            var result = await controller.Create(request);
 
             // Assert
-            var statusResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal(500, statusResult.StatusCode);
-            Assert.Contains("Name is required", statusResult.Value.ToString());
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Contains("Required", badRequestResult.Value?.ToString());
         }
-
-        [Fact]
-        public async Task Create_Should_Return_500_When_DuplicateName()
-        {
-            // Arrange
-            var mockMediator = new Mock<IMediator>();
-            var controller = new RoleController(mockMediator.Object);
-            var command = new CreateRoleCommand { Name = "Admin" };
-            mockMediator.Setup(m => m.Send(command, default)).ThrowsAsync(new InvalidOperationException("Role already exists"));
-
-            // Act
-            var result = await controller.Create(command);
-
-            // Assert
-            var statusResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal(500, statusResult.StatusCode);
-            Assert.Contains("Role already exists", statusResult.Value.ToString());
-        }
-
-        [Fact]
-        public async Task Create_Should_Return_500_When_RepositoryException()
-        {
-            // Arrange
-            var mockMediator = new Mock<IMediator>();
-            var controller = new RoleController(mockMediator.Object);
-            var command = new CreateRoleCommand { Name = "Admin" };
-            mockMediator.Setup(m => m.Send(command, default)).ThrowsAsync(new Exception("DB error"));
-
-            // Act
-            var result = await controller.Create(command);
-
-            // Assert
-            var statusResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal(500, statusResult.StatusCode);
-            Assert.Contains("DB error", statusResult.Value.ToString());
-        }*/
     }
 }

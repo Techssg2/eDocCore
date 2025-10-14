@@ -1,9 +1,8 @@
-using eDocCore.Application.Features.Roles.Commands;
-using eDocCore.Application.Features.Roles.Queries;
-using MediatR;
+﻿using eDocCore.Application.Features.Roles.DTOs;
+using eDocCore.Application.Features.Roles.Services;
+using eDocCore.Application.Common.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace eDocCore.API.Controllers
 {
@@ -11,41 +10,81 @@ namespace eDocCore.API.Controllers
     [Route("api/[controller]")]
     public class RoleController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IRoleService _roleService;
 
-        public RoleController(IMediator mediator)
+        public RoleController(IRoleService roleService)
         {
-            _mediator = mediator;
+            _roleService = roleService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateRoleCommand command)
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            var id = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetById), new { id }, command);
+            var roles = await _roleService.GetAllAsync();
+            return Ok(roles);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateRoleCommand command)
+        [HttpGet("paged")]
+        public async Task<ActionResult<PagedResult<RoleDto>>> GetPaged([FromQuery] GetRolesRequest request, CancellationToken ct)
         {
-            if (id != command.Id) return BadRequest();
-            var result = await _mediator.Send(command);
-            return result ? NoContent() : StatusCode(500, "Error updating role.");
+            var result = await _roleService.GetPagedInternalAsync(request, ct);
+            return Ok(result);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        // Hỗ trợ POST để nhận filter phức tạp qua body
+        [HttpPost("paged")]
+        public async Task<ActionResult<PagedResult<RoleDto>>> GetPagedPost([FromBody] GetRolesRequest request, CancellationToken ct)
         {
-            var result = await _mediator.Send(new DeleteRoleCommand { Id = id });
-            return result ? NoContent() : StatusCode(500, "Error deleting role.");
+            var result = await _roleService.GetPagedInternalAsync(request, ct);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var role = await _mediator.Send(new GetRoleByIdQuery { Id = id });
+            var role = await _roleService.GetByIdAsync(id);
             if (role == null) return NotFound();
             return Ok(role);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateRoleRequest request)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            try
+            {
+                var created = await _roleService.CreateAsync(request);
+                return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateRoleRequest request)
+        {
+            if (id != request.Id) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            try
+            {
+                var updated = await _roleService.UpdateAsync(request);
+                if (!updated) return NotFound();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var deleted = await _roleService.DeleteAsync(id);
+            if (!deleted) return NotFound();
+            return NoContent();
         }
     }
 }

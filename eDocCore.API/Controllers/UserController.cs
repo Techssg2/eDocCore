@@ -7,7 +7,7 @@ using eDocCore.Application.Features.Users.Queries;
 namespace eDocCore.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -28,15 +28,15 @@ namespace eDocCore.API.Controllers
             return Ok(users);
         }
 
-        // POST: /User
+        // POST: /api/user
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
         {
             var id = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetUsers), new { id }, command);
+            return CreatedAtAction(nameof(GetUsers), new { id }, id);
         }
 
-        // PUT: /User/{id}
+        // PUT: /api/user/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserCommand command)
         {
@@ -46,7 +46,7 @@ namespace eDocCore.API.Controllers
             return NoContent();
         }
 
-        // DELETE: /User/{id}
+        // DELETE: /api/user/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {

@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using eDocCore.Application.Behaviours;
+using eDocCore.Application.Features.Roles.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,9 @@ namespace eDocCore.Application
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             });
+
+            // Application services (không CQRS)
+            services.AddScoped<IRoleService, RoleService>();
 
             return services;
         }

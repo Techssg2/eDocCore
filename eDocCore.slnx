@@ -1,18 +1,12 @@
 <Solution>
   <Folder Name="/(Core) Dynamic Link Library/" />
-  <Folder Name="/edoc.Core.BE/">
+  <Folder Name="/eDocCore.BE/">
     <Project Path="eDocCore.API/eDocCore.API.csproj" />
     <Project Path="eDocCore.Application/eDocCore.Application.csproj" />
     <Project Path="eDocCore.Domain/eDocCore.Domain.csproj" />
     <Project Path="eDocCore.Infrastructure/eDocCore.Infrastructure.csproj" />
   </Folder>
-  <Folder Name="/eDocCore.UI/">
-    <Project Path="eDocCore.UI/edoccore.ui.client/eDocCore.UI.Client.esproj">
-      <Build />
-      <Deploy />
-    </Project>
-    <Project Path="eDocCore.UI/eDocCore.UI.Server/eDocCore.UI.Server.csproj" Id="7f33b3e1-7049-4683-aee7-9c57a0df8587" />
-  </Folder>
+  <Folder Name="/eDocCore.UI/" />
   <Folder Name="/eDocCore.UnitTest/">
     <Project Path="eDocCore.Tests/eDocCore.Tests.csproj" Id="b7f488ff-ff5f-4893-88d2-c36203d4e076" />
   </Folder>

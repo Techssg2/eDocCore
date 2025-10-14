@@ -1,9 +1,8 @@
-﻿using eDocCore.Application.Interfaces;
-using eDocCore.Domain.Entities;
+﻿using eDocCore.Domain.Entities;
 using eDocCore.Domain.Interfaces;
+using eDocCore.Domain.Interfaces.Extend;
 using eDocCore.Infrastructure.Persistence;
 using eDocCore.Infrastructure.Persistence.Repositories;
-using eDocCore.Infrastructure.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,12 +20,12 @@ namespace eDocCore.Infrastructure
             // Đăng ký Generic Repository cho tất cả entities
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            // Unit of Work (giữ tạm; cân nhắc bỏ SaveChanges trong repo nếu dùng UoW thực sự)
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Đăng ký các dịch vụ khác
-            services.AddTransient<IEmailService, EmailService>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IDocumentRepository, DocumentRepository>();
 
             return services;
         }

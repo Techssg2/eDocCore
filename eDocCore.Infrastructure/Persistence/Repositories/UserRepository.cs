@@ -1,9 +1,9 @@
-using eDocCore.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using eDocCore.Domain.Entities;
+using eDocCore.Domain.Interfaces.Extend;
 
 namespace eDocCore.Infrastructure.Persistence.Repositories
 {

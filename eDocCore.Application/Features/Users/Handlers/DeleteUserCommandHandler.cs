@@ -1,7 +1,7 @@
 using MediatR;
-using eDocCore.Domain.Interfaces;
 using eDocCore.Domain.Entities;
 using eDocCore.Application.Features.Users.Commands;
+using eDocCore.Domain.Interfaces.Extend;
 
 namespace eDocCore.Application.Features.Users.Handlers
 {

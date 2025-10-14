@@ -1,10 +1,12 @@
 ﻿using eDocCore.Domain.Entities;
 using eDocCore.Domain.Interfaces;
+using eDocCore.Infrastructure.Persistence; // explicit for ApplicationDbContext
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace eDocCore.Infrastructure.Persistence.Repositories
@@ -18,39 +20,209 @@ namespace eDocCore.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<T> AddAsync(T entity)
+        public virtual async Task<T?> GetByIdAsync(Guid id)
+        {
+            return await _context.Set<T>().FindAsync(id);
+        }
+
+        public virtual async Task<IReadOnlyList<T>> GetAllAsync()
+        {
+            return await _context.Set<T>().AsNoTracking().ToListAsync();
+        }
+
+        public virtual async Task<T> AddAsync(T entity)
         {
             if (entity.Id == Guid.Empty)
                 entity.Id = Guid.NewGuid();
 
-            entity.Created = DateTime.Now;
-            entity.Modified = DateTime.Now;
+            // only set Created when not provided
+            if (entity.Created == default)
+                entity.Created = DateTimeOffset.UtcNow;
+
+            entity.Modified = DateTimeOffset.UtcNow;
+
             await _context.Set<T>().AddAsync(entity);
             await _context.SaveChangesAsync();
             return entity;
         }
 
-        public async Task DeleteAsync(T entity)
+        public virtual async Task<T> UpdateAsync(T entity)
         {
+            // audit
+            entity.Modified = DateTimeOffset.UtcNow;
+
+            // attach and mark modified, but do not overwrite immutable fields
+            var entry = _context.Entry(entity);
+            if (entry.State == EntityState.Detached)
+            {
+                _context.Set<T>().Attach(entity);
+                entry = _context.Entry(entity);
+            }
+
+            entry.State = EntityState.Modified;
+            entry.Property(e => e.Id).IsModified = false;
+            entry.Property(e => e.Created).IsModified = false;
+
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
+        public virtual async Task<bool> DeleteAsync(Guid id)
+        {
+            var entity = await _context.Set<T>().FindAsync(id);
+            if (entity == null)
+                return false;
+
             _context.Set<T>().Remove(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // entity may have been deleted by another process
+                return false;
+            }
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync()
+        // New overloads and helper methods per recommendations
+        public virtual async Task<T?> GetByIdAsync(Guid id, bool asNoTracking, CancellationToken ct = default)
         {
-            return await _context.Set<T>().AsNoTracking().ToListAsync();
+            var set = _context.Set<T>().AsQueryable();
+            if (asNoTracking) set = set.AsNoTracking();
+            return await set.FirstOrDefaultAsync(e => e.Id == id, ct);
         }
 
-        public async Task<T?> GetByIdAsync(Guid id)
+        public virtual async Task<IReadOnlyList<T>> GetAllAsync(bool asNoTracking, CancellationToken ct = default)
         {
-            return await _context.Set<T>().FindAsync(id);
+            var set = _context.Set<T>().AsQueryable();
+            if (asNoTracking) set = set.AsNoTracking();
+            return await set.ToListAsync(ct);
         }
 
-        public async Task UpdateAsync(T entity)
+        public virtual async Task<IReadOnlyList<T>> FindAsync(Expression<Func<T, bool>> predicate, bool asNoTracking = true, CancellationToken ct = default)
         {
-            entity.Modified = DateTime.Now;
-            _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            var query = _context.Set<T>().Where(predicate);
+            if (asNoTracking) query = query.AsNoTracking();
+            return await query.ToListAsync(ct);
+        }
+
+        public virtual async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken ct = default)
+        {
+            return await _context.Set<T>().AnyAsync(predicate, ct);
+        }
+
+        public virtual async Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null, CancellationToken ct = default)
+        {
+            var query = _context.Set<T>().AsQueryable();
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+            return await query.CountAsync(ct);
+        }
+
+        public virtual async Task<(IReadOnlyList<T> Items, int TotalCount)> GetPagedAsync(
+            int page,
+            int pageSize,
+            Expression<Func<T, bool>>? filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            bool asNoTracking = true,
+            CancellationToken ct = default)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+
+            var query = _context.Set<T>().AsQueryable();
+            if (filter != null) query = query.Where(filter);
+            var total = await query.CountAsync(ct);
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            if (asNoTracking) query = query.AsNoTracking();
+
+            var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(ct);
+            return (items, total);
+        }
+
+        public virtual async Task<(IReadOnlyList<TResult> Items, int TotalCount)> GetPagedProjectedAsync<TResult>(
+            int page,
+            int pageSize,
+            Expression<Func<T, bool>>? filter,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy,
+            Expression<Func<T, TResult>> selector,
+            bool asNoTracking = true,
+            CancellationToken ct = default)
+        {
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+
+            var set = _context.Set<T>().AsQueryable();
+            if (filter != null)
+            {
+                set = set.Where(filter);
+            }
+
+            var total = await set.CountAsync(ct);
+
+            if (orderBy != null)
+            {
+                set = orderBy(set);
+            }
+
+            if (asNoTracking)
+            {
+                set = set.AsNoTracking();
+            }
+
+            var query = set.Skip((page - 1) * pageSize).Take(pageSize).Select(selector);
+            var items = await query.ToListAsync(ct);
+            return (items, total);
+        }
+
+        public virtual async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken ct = default)
+        {
+            var now = DateTimeOffset.UtcNow;
+            foreach (var entity in entities)
+            {
+                if (entity.Id == Guid.Empty)
+                    entity.Id = Guid.NewGuid();
+                if (entity.Created == default)
+                    entity.Created = now;
+                entity.Modified = now;
+            }
+
+            await _context.Set<T>().AddRangeAsync(entities, ct);
+            await _context.SaveChangesAsync(ct);
+        }
+
+        public virtual async Task UpdateRangeAsync(IEnumerable<T> entities, CancellationToken ct = default)
+        {
+            var now = DateTimeOffset.UtcNow;
+            foreach (var entity in entities)
+            {
+                entity.Modified = now;
+                var entry = _context.Entry(entity);
+                if (entry.State == EntityState.Detached)
+                {
+                    _context.Set<T>().Attach(entity);
+                    entry = _context.Entry(entity);
+                }
+                entry.State = EntityState.Modified;
+                entry.Property(e => e.Id).IsModified = false;
+                entry.Property(e => e.Created).IsModified = false;
+            }
+            await _context.SaveChangesAsync(ct);
+        }
+
+        public virtual async Task RemoveRangeAsync(IEnumerable<T> entities, CancellationToken ct = default)
+        {
+            _context.Set<T>().RemoveRange(entities);
+            await _context.SaveChangesAsync(ct);
         }
     }
 }
