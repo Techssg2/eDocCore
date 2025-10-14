@@ -1,0 +1,16 @@
+﻿using AutoMapper;
+using eDocCore.Application.Roles.DTOs;
+using eDocCore.Domain.Entities;
+
+namespace eDocCore.Application.Mappers
+{
+    public class RoleMappingProfile : Profile
+    {
+        public RoleMappingProfile()
+        {
+            CreateMap<Role, RoleDto>();
+            CreateMap<CreateRoleRequest, Role>();
+            CreateMap<UpdateRoleRequest, Role>();
+        }
+    }
+}

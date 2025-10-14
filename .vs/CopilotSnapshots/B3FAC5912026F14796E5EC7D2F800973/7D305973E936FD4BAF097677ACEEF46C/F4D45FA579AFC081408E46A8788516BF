@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using eDocCore.Application.DTOs.Roles;
+
+namespace eDocCore.Application.Services
+{
+    public interface IRoleService
+    {
+        Task<IReadOnlyList<RoleDto>> GetAllAsync();
+        Task<RoleDto?> GetByIdAsync(Guid id);
+        Task<RoleDto> CreateAsync(CreateRoleRequest request);
+        Task<bool> UpdateAsync(UpdateRoleRequest request);
+        Task<bool> DeleteAsync(Guid id);
+    }
+}

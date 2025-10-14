@@ -1,0 +1,10 @@
+﻿using eDocCore.Domain.Entities;
+
+namespace eDocCore.Domain.Entities
+{
+    public partial class Role : BaseEntity
+    {
+        // Kế thừa BaseEntity để dùng Id/Created/Modified chuẩn
+        // Không khai báo trùng lặp property ở file Role.cs
+    }
+}

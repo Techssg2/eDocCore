@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using eDocCore.Domain.Entities;
+using eDocCore.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
+namespace eDocCore.Infrastructure.Persistence.Repositories
+{
+    public class DepartmentRepository : GenericRepository<Department>, IDepartmentRepository
+    {
+        public DepartmentRepository(ApplicationDbContext dbContext) : base(dbContext) { }
+        // Thêm các phương thức đặc thù cho Department nếu cần
+    }
+}

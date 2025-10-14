@@ -1,0 +1,36 @@
+﻿import React, { useState } from 'react';
+import LoginForm from './components/LoginForm/LoginForm';
+import DashboardForm from './components/Dashboard/Dashboard';
+import RoleList from './components/RoleList/RoleList';
+import Register from './pages/Register/Register';
+import './App.css';
+import { useAuth } from './AuthContext';
+
+interface Forecast {
+  date: string;
+  temperatureC: number;
+  temperatureF: number;
+  summary: string;
+}
+
+const App: React.FC = () => {
+  const { token, setToken } = useAuth();
+  const [showRegister, setShowRegister] = useState<boolean>(false);
+
+  if (!token) {
+    if (showRegister) {
+      return <Register />;
+    }
+    return <LoginForm onLogin={setToken} onShowRegister={() => setShowRegister(true)} />;
+  }
+
+  return (
+    <div>
+      <h1 id="tableLabel">Dự báo thời tiết</h1>
+      <p>Thành phần này minh họa lấy dữ liệu từ máy chủ.</p>
+      <RoleList />
+    </div>
+  );
+};
+
+export default App;

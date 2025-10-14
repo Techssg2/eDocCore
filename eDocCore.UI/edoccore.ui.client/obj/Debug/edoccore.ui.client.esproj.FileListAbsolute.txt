@@ -1,1 +1,0 @@
-D:\SourceCode\eDocCore\eDocCore.UI\edoccore.ui.client\obj\Debug\eDocCore.UI.Client.esproj.CoreCompileInputs.cache

@@ -1,0 +1,31 @@
+﻿import React, { useEffect, useState } from 'react';
+import LoginForm from './components/LoginForm/LoginForm';
+import DashboardForm from './components/Dashboard/Dashboard';
+import RoleList from './components/RoleList/RoleList';
+import Register from './pages/Register/Register';
+import './App.css';
+
+interface Forecast {
+  date: string;
+  temperatureC: number;
+  temperatureF: number;
+  summary: string;
+}
+
+const App: React.FC = () => {
+  const [token, setToken] = useState<string | null>(null);
+  const [showRegister, setShowRegister] = useState<boolean>(false);
+
+  useEffect(() => {
+    
+  }, []);
+
+  if (!token) {
+    if (showRegister) {
+      return <Register />;
+    }
+      return <LoginForm onLogin={setToken} onShowRegister={() => setShowRegister(true)} />;
+  }
+};
+
+export default App;

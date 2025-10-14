@@ -1,0 +1,34 @@
+﻿using eDocCore.Domain.Exceptions;
+using eDocCore.Domain.Interfaces;
+using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Metadata;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace eDocCore.Application.Features.Documents.Commands.DeleteDocument
+{
+    public class DeleteDocumentCommandHandler : IRequestHandler<DeleteDocumentCommand>
+    {
+        private readonly IDocumentRepository _documentRepository;
+
+        public DeleteDocumentCommandHandler(IDocumentRepository documentRepository)
+        {
+            _documentRepository = documentRepository;
+        }
+
+        public async Task Handle(DeleteDocumentCommand request, CancellationToken cancellationToken)
+        {
+            var documentToDelete = await _documentRepository.GetByIdAsync(request.Id);
+
+            if (documentToDelete == null)
+            {
+                throw new NotFoundException(nameof(Document), request.Id);
+            }
+
+            await _documentRepository.DeleteAsync(documentToDelete);
+        }
+    }
+}

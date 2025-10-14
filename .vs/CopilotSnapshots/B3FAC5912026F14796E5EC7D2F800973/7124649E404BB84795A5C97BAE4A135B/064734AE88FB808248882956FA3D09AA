@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace eDocCore.Domain.Entities
+{
+    public class Department : BaseEntity
+    {
+        public string Name { get; set; }
+        public bool IsActive { get; set; }
+        // Audit fields inherited from BaseEntity (Created/Modified)
+    }
+}

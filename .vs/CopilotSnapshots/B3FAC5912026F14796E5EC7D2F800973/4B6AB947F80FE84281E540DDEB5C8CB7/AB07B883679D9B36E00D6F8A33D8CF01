@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using eDocCore.Application.Behaviours;
+using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace eDocCore.Application
+{
+    public static class DependencyInjection
+    {
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        {
+            // Cấu hình AutoMapper
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            // Cấu hình FluentValidation
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+            // Cấu hình MediatR
+            services.AddMediatR(cfg => {
+                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+            });
+
+            return services;
+        }
+    }
+}

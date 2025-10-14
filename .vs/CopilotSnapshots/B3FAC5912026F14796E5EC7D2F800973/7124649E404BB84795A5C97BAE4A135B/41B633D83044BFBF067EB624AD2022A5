@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace eDocCore.Domain.Entities;
+
+public partial class Role
+{
+    // Id/Created/Modified moved to BaseEntity via partial class
+    public string Name { get; set; } = null!;
+
+    public bool IsActive { get; set; }
+
+    public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+}

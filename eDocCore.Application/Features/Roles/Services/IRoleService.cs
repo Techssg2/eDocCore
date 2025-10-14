@@ -1,0 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using eDocCore.Application.Common.Models;
+
+namespace eDocCore.Application.Features.Roles.Services
+{
+    public interface IRoleService
+    {
+        Task<IReadOnlyList<DTOs.RoleDto>> GetAllAsync();
+        Task<DTOs.RoleDto?> GetByIdAsync(Guid id);
+        Task<DTOs.RoleDto> CreateAsync(DTOs.CreateRoleRequest request);
+        Task<bool> UpdateAsync(DTOs.UpdateRoleRequest request);
+        Task<bool> DeleteAsync(Guid id);
+
+        // Thêm API phân trang + filter
+        Task<PagedResult<DTOs.RoleDto>> GetPagedInternalAsync(DTOs.GetRolesRequest request, System.Threading.CancellationToken ct = default);
+    }
+}

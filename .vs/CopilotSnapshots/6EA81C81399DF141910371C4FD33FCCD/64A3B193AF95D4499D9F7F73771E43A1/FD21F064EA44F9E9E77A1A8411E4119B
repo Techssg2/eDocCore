@@ -1,0 +1,86 @@
+﻿using eDocCore.Domain.Entities;
+using eDocCore.Domain.Interfaces;
+using eDocCore.Infrastructure.Persistence; // explicit for ApplicationDbContext
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace eDocCore.Infrastructure.Persistence.Repositories
+{
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    {
+        protected readonly ApplicationDbContext _context;
+
+        public GenericRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public virtual async Task<T?> GetByIdAsync(Guid id)
+        {
+            return await _context.Set<T>().FindAsync(id);
+        }
+
+        public virtual async Task<IReadOnlyList<T>> GetAllAsync()
+        {
+            return await _context.Set<T>().AsNoTracking().ToListAsync();
+        }
+
+        public virtual async Task<T> AddAsync(T entity)
+        {
+            if (entity.Id == Guid.Empty)
+                entity.Id = Guid.NewGuid();
+
+            // only set Created when not provided
+            if (entity.Created == default)
+                entity.Created = DateTimeOffset.UtcNow;
+
+            entity.Modified = DateTimeOffset.UtcNow;
+
+            await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
+        public virtual async Task<T> UpdateAsync(T entity)
+        {
+            // audit
+            entity.Modified = DateTimeOffset.UtcNow;
+
+            // attach and mark modified, but do not overwrite immutable fields
+            var entry = _context.Entry(entity);
+            if (entry.State == EntityState.Detached)
+            {
+                _context.Set<T>().Attach(entity);
+                entry = _context.Entry(entity);
+            }
+
+            entry.State = EntityState.Modified;
+            entry.Property(e => e.Id).IsModified = false;
+            entry.Property(e => e.Created).IsModified = false;
+
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
+        public virtual async Task<bool> DeleteAsync(Guid id)
+        {
+            var entity = await _context.Set<T>().FindAsync(id);
+            if (entity == null)
+                return false;
+
+            _context.Set<T>().Remove(entity);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // entity may have been deleted by another process
+                return false;
+            }
+        }
+    }
+}

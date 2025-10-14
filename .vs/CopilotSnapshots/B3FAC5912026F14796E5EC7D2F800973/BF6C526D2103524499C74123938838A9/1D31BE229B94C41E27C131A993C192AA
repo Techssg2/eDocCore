@@ -1,0 +1,15 @@
+﻿using AutoMapper;
+using eDocCore.Application.DTOs;
+using eDocCore.Domain.Entities;
+
+namespace eDocCore.Application.Mappers
+{
+    public class MappingProfile : Profile
+    {
+        public MappingProfile()
+        {
+            // Document -> DTO
+            CreateMap<Document, DocumentDto>();
+        }
+    }
+}

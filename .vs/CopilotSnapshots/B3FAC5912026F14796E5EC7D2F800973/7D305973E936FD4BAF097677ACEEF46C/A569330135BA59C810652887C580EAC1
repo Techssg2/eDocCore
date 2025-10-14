@@ -1,0 +1,66 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
+using eDocCore.Application.DTOs.Roles;
+using eDocCore.Domain.Entities;
+using eDocCore.Domain.Interfaces;
+
+namespace eDocCore.Application.Services
+{
+    /// <summary>
+    /// Service đơn giản cho Role (không dùng CQRS)
+    /// </summary>
+    public class RoleService : IRoleService
+    {
+        private readonly IRoleRepository _roleRepository;
+        private readonly IMapper _mapper;
+
+        public RoleService(IRoleRepository roleRepository, IMapper mapper)
+        {
+            _roleRepository = roleRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<IReadOnlyList<RoleDto>> GetAllAsync()
+        {
+            var roles = await _roleRepository.GetAllAsync();
+            return _mapper.Map<IReadOnlyList<RoleDto>>(roles);
+        }
+
+        public async Task<RoleDto?> GetByIdAsync(Guid id)
+        {
+            var role = await _roleRepository.GetByIdAsync(id);
+            return _mapper.Map<RoleDto?>(role);
+        }
+
+        public async Task<RoleDto> CreateAsync(CreateRoleRequest request)
+        {
+            if (await _roleRepository.ExistsByNameAsync(request.Name))
+                throw new InvalidOperationException("Role name already exists");
+
+            var role = _mapper.Map<Role>(request);
+            role = await _roleRepository.AddAsync(role);
+            return _mapper.Map<RoleDto>(role);
+        }
+
+        public async Task<bool> UpdateAsync(UpdateRoleRequest request)
+        {
+            var existing = await _roleRepository.GetByIdAsync(request.Id);
+            if (existing == null) return false;
+
+            if (!string.Equals(existing.Name, request.Name, StringComparison.OrdinalIgnoreCase)
+                && await _roleRepository.ExistsByNameAsync(request.Name))
+            {
+                throw new InvalidOperationException("Role name already exists");
+            }
+
+            _mapper.Map(request, existing);
+            await _roleRepository.UpdateAsync(existing);
+            return true;
+        }
+
+        public Task<bool> DeleteAsync(Guid id)
+            => _roleRepository.DeleteAsync(id);
+    }
+}

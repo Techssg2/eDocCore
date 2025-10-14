@@ -1,0 +1,17 @@
+﻿using FluentValidation;
+
+namespace eDocCore.Application.DTOs.Roles
+{
+    public class UpdateRoleRequestValidator : AbstractValidator<UpdateRoleRequest>
+    {
+        public UpdateRoleRequestValidator()
+        {
+            RuleFor(x => x.Id).NotEmpty();
+            RuleFor(x => x.Name)
+                .Transform(n => n?.Trim() ?? string.Empty)
+                .NotEmpty()
+                .MaximumLength(100)
+                .Matches("^[a-zA-Z0-9 ]*$");
+        }
+    }
+}

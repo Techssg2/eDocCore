@@ -1,0 +1,87 @@
+﻿using Xunit;
+using Moq;
+using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using eDocCore.API.Controllers;
+using eDocCore.Application.Services;
+using eDocCore.Domain.Entities;
+
+namespace eDocCore.Tests.Role
+{
+    public class RoleControllerUnitTests
+    {
+        [Fact]
+        public async Task Create_Should_Return_CreatedAtActionResult()
+        {
+            // Arrange
+            var mockService = new Mock<IRoleService>();
+            var controller = new RoleController(mockService.Object);
+            var role = new eDocCore.Domain.Entities.Role { Name = "Admin", IsActive = true };
+            var created = new eDocCore.Domain.Entities.Role { Id = Guid.NewGuid(), Name = role.Name, IsActive = role.IsActive };
+
+            mockService.Setup(s => s.CreateAsync(It.IsAny<eDocCore.Domain.Entities.Role>())).ReturnsAsync(created);
+
+            // Act
+            var result = await controller.Create(role);
+
+            // Assert
+            var createdResult = Assert.IsType<CreatedAtActionResult>(result);
+            Assert.Equal(created, createdResult.Value);
+            Assert.Equal("GetById", createdResult.ActionName);
+        }
+
+        [Fact]
+        public async Task Create_Should_Return_500_When_Exception()
+        {
+            // Arrange
+            var mockService = new Mock<IRoleService>();
+            var controller = new RoleController(mockService.Object);
+            var role = new eDocCore.Domain.Entities.Role { Name = "Admin" };
+            mockService.Setup(s => s.CreateAsync(It.IsAny<eDocCore.Domain.Entities.Role>())).ThrowsAsync(new Exception("DB error"));
+
+            // Act
+            var result = await controller.Create(role);
+
+            // Assert
+            var statusResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(500, statusResult.StatusCode);
+            Assert.Contains("DB error", statusResult.Value?.ToString());
+        }
+
+        [Fact]
+        public async Task Create_Should_Return_500_When_NameIsEmpty()
+        {
+            // Arrange
+            var mockService = new Mock<IRoleService>();
+            var controller = new RoleController(mockService.Object);
+            var role = new eDocCore.Domain.Entities.Role { Name = string.Empty };
+            mockService.Setup(s => s.CreateAsync(It.IsAny<eDocCore.Domain.Entities.Role>())).ThrowsAsync(new ArgumentException("Role name is required"));
+
+            // Act
+            var result = await controller.Create(role);
+
+            // Assert
+            var statusResult = Assert.IsType<ObjectResult>(result);
+            Assert.Equal(500, statusResult.StatusCode);
+            Assert.Contains("Role name is required", statusResult.Value?.ToString());
+        }
+
+        [Fact]
+        public async Task Create_Should_Return_400_When_InvalidModelState()
+        {
+            // Arrange
+            var mockService = new Mock<IRoleService>();
+            var controller = new RoleController(mockService.Object);
+            controller.ModelState.AddModelError("Name", "Required");
+            var role = new eDocCore.Domain.Entities.Role { Name = string.Empty };
+
+            // Act
+            var result = await controller.Create(role);
+
+            // Assert
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Contains("Required", badRequestResult.Value?.ToString());
+        }
+    }
+}

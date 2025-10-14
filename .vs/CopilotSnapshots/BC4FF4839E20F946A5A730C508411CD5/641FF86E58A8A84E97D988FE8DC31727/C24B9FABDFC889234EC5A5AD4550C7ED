@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using eDocCore.Domain.Entities;
+using eDocCore.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
+namespace eDocCore.Infrastructure.Persistence.Repositories
+{
+    public class DepartmentRepository : GenericRepository<Department>, IDepartmentRepository
+    {
+        public DepartmentRepository(ApplicationDbContext dbContext) : base(dbContext) { }
+        // Thêm các phương thức đặc thù cho Department nếu cần
+        public override async Task<bool> DeleteAsync(Guid id)
+        {
+            var entity = await _context.Set<Department>().FindAsync(id);
+            if (entity != null)
+            {
+                _context.Set<Department>().Remove(entity);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+    }
+}

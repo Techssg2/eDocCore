@@ -1,0 +1,28 @@
+﻿using AutoMapper;
+using eDocCore.Application.DTOs;
+using eDocCore.Application.Features.Documents.Commands.CreateDocument;
+using eDocCore.Application.Features.Documents.Commands.UpdateDocument;
+using eDocCore.Domain.Entities;
+
+namespace eDocCore.Application.Mappers
+{
+    public class MappingProfile : Profile
+    {
+        public MappingProfile()
+        {
+            // Document -> DTO
+            CreateMap<Document, DocumentDto>()
+                .ForMember(d => d.CreatedDate, opt => opt.MapFrom(s => s.Created.UtcDateTime));
+
+            // Commands -> Domain (ignore audit/Id; repo will handle)
+            CreateMap<CreateDocumentCommand, Document>()
+                .ForMember(d => d.Id, opt => opt.Ignore())
+                .ForMember(d => d.Created, opt => opt.Ignore())
+                .ForMember(d => d.Modified, opt => opt.Ignore());
+
+            CreateMap<UpdateDocumentCommand, Document>()
+                .ForMember(d => d.Created, opt => opt.Ignore())
+                .ForMember(d => d.Modified, opt => opt.Ignore());
+        }
+    }
+}

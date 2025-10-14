@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace eDocCore.Application.Services
+{
+    // Giữ interface cũ chỉ để tương thích; đánh dấu obsolete và hướng sang namespace mới
+    [Obsolete("Use eDocCore.Application.Roles.Services.IRoleService instead.")]
+    public interface IRoleService
+    {
+        Task<IReadOnlyList<Application.Roles.DTOs.RoleDto>> GetAllAsync();
+        Task<Application.Roles.DTOs.RoleDto?> GetByIdAsync(Guid id);
+        Task<Application.Roles.DTOs.RoleDto> CreateAsync(Application.Roles.DTOs.CreateRoleRequest request);
+        Task<bool> UpdateAsync(Application.Roles.DTOs.UpdateRoleRequest request);
+        Task<bool> DeleteAsync(Guid id);
+    }
+}
