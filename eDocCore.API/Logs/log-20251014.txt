@@ -1,0 +1,57 @@
+2025-10-14 16:43:10.516 +07:00 [INF] Updating role "3fa85f64-5717-4562-b3fc-2c963f66afa6" | 40000005-0006-fc00-b63f-84710c7967bb a1b1e24908e595a7f1f34f434b3ed2d7
+2025-10-14 16:43:15.955 +07:00 [WRN] Role "3fa85f64-5717-4562-b3fc-2c963f66afa6" not found for update | 40000005-0006-fc00-b63f-84710c7967bb a1b1e24908e595a7f1f34f434b3ed2d7
+2025-10-14 16:43:15.983 +07:00 [INF] HTTP PUT /api/Role => 404 (7339.405 ms) | TraceId=40000005-0006-fc00-b63f-84710c7967bb | Request={
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "Role1",
+  "isActive": true
+} | Response={"success":false,"data":null,"message":"Not found","traceId":"40000005-0006-fc00-b63f-84710c7967bb","errors":null} | 40000005-0006-fc00-b63f-84710c7967bb a1b1e24908e595a7f1f34f434b3ed2d7
+2025-10-14 16:43:26.465 +07:00 [INF] Updating role "3fa85f64-5717-4562-b3fc-2c963f66afa6" | 40000039-0002-fd00-b63f-84710c7967bb b04831c2d029c8da08896ef836037e55
+2025-10-14 16:43:26.481 +07:00 [WRN] Role "3fa85f64-5717-4562-b3fc-2c963f66afa6" not found for update | 40000039-0002-fd00-b63f-84710c7967bb b04831c2d029c8da08896ef836037e55
+2025-10-14 16:43:26.484 +07:00 [INF] HTTP PUT /api/Role => 404 (45.579 ms) | TraceId=40000039-0002-fd00-b63f-84710c7967bb | Request={
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "Role1",
+  "isActive": true
+} | Response={"success":false,"data":null,"message":"Not found","traceId":"40000039-0002-fd00-b63f-84710c7967bb","errors":null} | 40000039-0002-fd00-b63f-84710c7967bb b04831c2d029c8da08896ef836037e55
+2025-10-14 16:45:21.515 +07:00 [INF] Updating role "3fa85f64-5717-4562-b3fc-2c963f66afa6" | 40000015-0003-fc00-b63f-84710c7967bb ff125ea17193f36e17cbc46d865e4167
+2025-10-14 16:45:22.324 +07:00 [WRN] Role "3fa85f64-5717-4562-b3fc-2c963f66afa6" not found for update | 40000015-0003-fc00-b63f-84710c7967bb ff125ea17193f36e17cbc46d865e4167
+2025-10-14 16:45:22.395 +07:00 [WRN] Business error updating role "3fa85f64-5717-4562-b3fc-2c963f66afa6" | 40000015-0003-fc00-b63f-84710c7967bb ff125ea17193f36e17cbc46d865e4167
+eDocCore.Application.Common.Exceptions.ConflictException: Role 3fa85f64-5717-4562-b3fc-2c963f66afa6 not found for update
+   at eDocCore.Application.Features.Roles.Services.RoleService.UpdateAsync(UpdateRoleRequest request) in D:\SourceCode\eDocCore\eDocCore.Application\Features\Roles\Services\RoleService.cs:line 92
+2025-10-14 16:45:22.426 +07:00 [ERR] An error occurred using a transaction. | 40000015-0003-fc00-b63f-84710c7967bb ff125ea17193f36e17cbc46d865e4167
+2025-10-14 16:45:22.545 +07:00 [INF] HTTP PUT /api/Role => 500 (3091.369 ms) | TraceId=40000015-0003-fc00-b63f-84710c7967bb | Request={
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "Role1",
+  "isActive": true
+} | Response={"success":false,"data":null,"message":"This SqlTransaction has completed; it is no longer usable.","traceId":"40000015-0003-fc00-b63f-84710c7967bb","errors":null} | 40000015-0003-fc00-b63f-84710c7967bb ff125ea17193f36e17cbc46d865e4167
+2025-10-14 16:45:27.191 +07:00 [INF] Updating role "3fa85f64-5717-4562-b3fc-2c963f66afa6" | 4000002b-0005-fc00-b63f-84710c7967bb b591fcea621709cacaa62aab5618f00b
+2025-10-14 16:45:27.206 +07:00 [WRN] Role "3fa85f64-5717-4562-b3fc-2c963f66afa6" not found for update | 4000002b-0005-fc00-b63f-84710c7967bb b591fcea621709cacaa62aab5618f00b
+2025-10-14 16:45:27.239 +07:00 [WRN] Business error updating role "3fa85f64-5717-4562-b3fc-2c963f66afa6" | 4000002b-0005-fc00-b63f-84710c7967bb b591fcea621709cacaa62aab5618f00b
+eDocCore.Application.Common.Exceptions.ConflictException: Role 3fa85f64-5717-4562-b3fc-2c963f66afa6 not found for update
+   at eDocCore.Application.Features.Roles.Services.RoleService.UpdateAsync(UpdateRoleRequest request) in D:\SourceCode\eDocCore\eDocCore.Application\Features\Roles\Services\RoleService.cs:line 92
+2025-10-14 16:45:27.240 +07:00 [ERR] An error occurred using a transaction. | 4000002b-0005-fc00-b63f-84710c7967bb b591fcea621709cacaa62aab5618f00b
+2025-10-14 16:45:27.345 +07:00 [INF] HTTP PUT /api/Role => 500 (181.771 ms) | TraceId=4000002b-0005-fc00-b63f-84710c7967bb | Request={
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "Role1",
+  "isActive": true
+} | Response={"success":false,"data":null,"message":"This SqlTransaction has completed; it is no longer usable.","traceId":"4000002b-0005-fc00-b63f-84710c7967bb","errors":null} | 4000002b-0005-fc00-b63f-84710c7967bb b591fcea621709cacaa62aab5618f00b
+2025-10-14 16:45:35.626 +07:00 [INF] Updating role "3fa85f64-5717-4562-b3fc-2c963f66afa6" | 40000004-0006-fa00-b63f-84710c7967bb d82c4a40bcd3b8e6f19f3570007f261e
+2025-10-14 16:45:35.633 +07:00 [WRN] Role "3fa85f64-5717-4562-b3fc-2c963f66afa6" not found for update | 40000004-0006-fa00-b63f-84710c7967bb d82c4a40bcd3b8e6f19f3570007f261e
+2025-10-14 16:45:37.832 +07:00 [WRN] Business error updating role "3fa85f64-5717-4562-b3fc-2c963f66afa6" | 40000004-0006-fa00-b63f-84710c7967bb d82c4a40bcd3b8e6f19f3570007f261e
+eDocCore.Application.Common.Exceptions.ConflictException: Role 3fa85f64-5717-4562-b3fc-2c963f66afa6 not found for update
+   at eDocCore.Application.Features.Roles.Services.RoleService.UpdateAsync(UpdateRoleRequest request) in D:\SourceCode\eDocCore\eDocCore.Application\Features\Roles\Services\RoleService.cs:line 92
+2025-10-14 16:45:37.833 +07:00 [ERR] An error occurred using a transaction. | 40000004-0006-fa00-b63f-84710c7967bb d82c4a40bcd3b8e6f19f3570007f261e
+2025-10-14 16:45:37.883 +07:00 [INF] HTTP PUT /api/Role => 500 (2353.246 ms) | TraceId=40000004-0006-fa00-b63f-84710c7967bb | Request={
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "Role1",
+  "isActive": true
+} | Response={"success":false,"data":null,"message":"This SqlTransaction has completed; it is no longer usable.","traceId":"40000004-0006-fa00-b63f-84710c7967bb","errors":null} | 40000004-0006-fa00-b63f-84710c7967bb d82c4a40bcd3b8e6f19f3570007f261e
+2025-10-14 16:45:56.227 +07:00 [INF] Updating role "3fa85f64-5717-4562-b3fc-2c963f66afa6" | 4000002c-0006-fb00-b63f-84710c7967bb 6952deecbf4c4de16275e2322343a4ec
+2025-10-14 16:45:56.844 +07:00 [WRN] Role "3fa85f64-5717-4562-b3fc-2c963f66afa6" not found for update | 4000002c-0006-fb00-b63f-84710c7967bb 6952deecbf4c4de16275e2322343a4ec
+2025-10-14 16:45:59.586 +07:00 [WRN] Business error updating role "3fa85f64-5717-4562-b3fc-2c963f66afa6" | 4000002c-0006-fb00-b63f-84710c7967bb 6952deecbf4c4de16275e2322343a4ec
+eDocCore.Application.Common.Exceptions.ConflictException: Role 3fa85f64-5717-4562-b3fc-2c963f66afa6 not found for update
+   at eDocCore.Application.Features.Roles.Services.RoleService.UpdateAsync(UpdateRoleRequest request) in D:\SourceCode\eDocCore\eDocCore.Application\Features\Roles\Services\RoleService.cs:line 91
+2025-10-14 16:45:59.669 +07:00 [INF] HTTP PUT /api/Role => 409 (4984.026 ms) | TraceId=4000002c-0006-fb00-b63f-84710c7967bb | Request={
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "Role1",
+  "isActive": true
+} | Response={"success":false,"data":null,"message":"Role 3fa85f64-5717-4562-b3fc-2c963f66afa6 not found for update","traceId":"4000002c-0006-fb00-b63f-84710c7967bb","errors":["Đây là lỗi"]} | 4000002c-0006-fb00-b63f-84710c7967bb 6952deecbf4c4de16275e2322343a4ec

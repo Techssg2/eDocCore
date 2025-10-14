@@ -1,0 +1,92 @@
+﻿using eDocCore.Application.Features.Roles.DTOs;
+using eDocCore.Application.Features.Roles.Services;
+using eDocCore.Application.Common.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading;
+
+namespace eDocCore.API.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class RoleController : ControllerBase
+    {
+        private readonly IRoleService _roleService;
+
+        public RoleController(IRoleService roleService)
+        {
+            _roleService = roleService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ApiResult<IReadOnlyList<RoleDto>>>> GetAll()
+        {
+            var roles = await _roleService.GetAllAsync();
+            return Ok(ApiResult<IReadOnlyList<RoleDto>>.Ok(roles, traceId: HttpContext.TraceIdentifier));
+        }
+
+        [HttpGet("paged")]
+        public async Task<ActionResult<ApiResult<PagedResult<RoleDto>>>> GetPaged([FromQuery] GetRolesRequest request, CancellationToken ct)
+        {
+            var result = await _roleService.GetPagedInternalAsync(request, ct);
+            return Ok(ApiResult<PagedResult<RoleDto>>.Ok(result, traceId: HttpContext.TraceIdentifier));
+        }
+
+        // Hỗ trợ POST để nhận filter phức tạp qua body
+        [HttpPost("paged")]
+        public async Task<ActionResult<ApiResult<PagedResult<RoleDto>>>> GetPagedPost([FromBody] GetRolesRequest request, CancellationToken ct)
+        {
+            var result = await _roleService.GetPagedInternalAsync(request, ct);
+            return Ok(ApiResult<PagedResult<RoleDto>>.Ok(result, traceId: HttpContext.TraceIdentifier));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ApiResult<RoleDto?>>> GetById(Guid id)
+        {
+            var role = await _roleService.GetByIdAsync(id);
+            if (role == null) return NotFound(ApiResult<RoleDto?>.Fail("Not found", traceId: HttpContext.TraceIdentifier));
+            return Ok(ApiResult<RoleDto?>.Ok(role, traceId: HttpContext.TraceIdentifier));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ApiResult<RoleDto>>> Create([FromBody] CreateRoleRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ApiResult<RoleDto>.Fail("Validation failed", errors: ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList(), traceId: HttpContext.TraceIdentifier));
+            try
+            {
+                var created = await _roleService.CreateAsync(request);
+                return CreatedAtAction(nameof(GetById), new { id = created.Id }, ApiResult<RoleDto>.Ok(created, traceId: HttpContext.TraceIdentifier));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResult<RoleDto>.Fail(ex.Message, traceId: HttpContext.TraceIdentifier));
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateRoleRequest request)
+        {
+            if (id != request.Id) return BadRequest(ApiResult<string>.Fail("Mismatched id", traceId: HttpContext.TraceIdentifier));
+            if (!ModelState.IsValid)
+                return BadRequest(ApiResult<string>.Fail("Validation failed", errors: ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList(), traceId: HttpContext.TraceIdentifier));
+            try
+            {
+                var updated = await _roleService.UpdateAsync(request);
+                if (!updated) return NotFound(ApiResult<string>.Fail("Not found", traceId: HttpContext.TraceIdentifier));
+                return Ok(ApiResult<string>.Ok("Updated", traceId: HttpContext.TraceIdentifier));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ApiResult<string>.Fail(ex.Message, traceId: HttpContext.TraceIdentifier));
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var deleted = await _roleService.DeleteAsync(id);
+            if (!deleted) return NotFound(ApiResult<string>.Fail("Not found", traceId: HttpContext.TraceIdentifier));
+            return Ok(ApiResult<string>.Ok("Deleted", traceId: HttpContext.TraceIdentifier));
+        }
+    }
+}
