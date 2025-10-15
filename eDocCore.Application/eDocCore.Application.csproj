@@ -11,8 +11,11 @@
 		<PackageReference Include="FluentValidation" Version="11.9.1" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.1" />
 		<PackageReference Include="MediatR" Version="12.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="8.0.8" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.6.2" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -21,6 +24,14 @@
 	
 	<ItemGroup>
 	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="Features\A-Example\DTOs\Request\" />
+	  <Folder Include="Features\A-Example\DTOs\Response\" />
+	  <Folder Include="Features\A-Example\Services\" />
+	  <Folder Include="Features\A-Example\Validators\" />
+	  <Folder Include="Features\Roles\DTOs\Response\" />
 	</ItemGroup>
 
 

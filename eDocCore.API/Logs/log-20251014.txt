@@ -55,3 +55,161 @@ eDocCore.Application.Common.Exceptions.ConflictException: Role 3fa85f64-5717-456
   "name": "Role1",
   "isActive": true
 } | Response={"success":false,"data":null,"message":"Role 3fa85f64-5717-4562-b3fc-2c963f66afa6 not found for update","traceId":"4000002c-0006-fb00-b63f-84710c7967bb","errors":["Đây là lỗi"]} | 4000002c-0006-fb00-b63f-84710c7967bb 6952deecbf4c4de16275e2322343a4ec
+2025-10-14 17:14:43.635 +07:00 [INF] HTTP POST /api/Auth/register => 200 (6073.329 ms) | TraceId=40000031-0005-fc00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1",
+  "fullName": "Phạm Văn Tâm",
+  "email": "string",
+  "isActive": true
+} | Response={"success":true,"data":"Registered","message":null,"traceId":"40000031-0005-fc00-b63f-84710c7967bb","errors":null} | 40000031-0005-fc00-b63f-84710c7967bb bbe5d9bc55ff461a75373c2feddfb57b
+2025-10-14 17:15:23.862 +07:00 [ERR] An unhandled exception has occurred. | 40000015-0000-fe00-b63f-84710c7967bb c12b1006009705cd423313e7f2fcd4de
+System.ArgumentOutOfRangeException: IDX10653: The encryption algorithm 'HS256' requires a key size of at least '128' bits. Key '[PII of type 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', is of size: '64'. (Parameter 'key')
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider..ctor(SecurityKey key, String algorithm, Boolean willCreateSignatures)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateSignatureProvider(SecurityKey key, String algorithm, Boolean willCreateSignatures, Boolean cacheProvider)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateForSigning(SecurityKey key, String algorithm, Boolean cacheProvider)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateForSigning(SecurityKey key, String algorithm)
+   at Microsoft.IdentityModel.JsonWebTokens.JwtTokenUtilities.CreateEncodedSignature(String input, SigningCredentials signingCredentials)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.WriteToken(SecurityToken token)
+   at eDocCore.Application.Features.Auth.Services.AuthService.LoginAsync(LoginRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.Application\Features\Auth\Services\AuthService.cs:line 89
+   at eDocCore.API.Controllers.AuthController.Login(LoginRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.API\Controllers\AuthController.cs:line 34
+   at lambda_method130(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.RoleAuthorizationMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\RoleAuthorizationMiddleware.cs:line 45
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.GlobalExceptionHandlerMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\GlobalExceptionHandlerMiddleware.cs:line 23
+2025-10-14 17:15:23.920 +07:00 [INF] HTTP POST /api/Auth/login => 500 (698.903 ms) | TraceId=40000015-0000-fe00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1"
+} | Response={"error":"An internal server error has occurred."} | 40000015-0000-fe00-b63f-84710c7967bb c12b1006009705cd423313e7f2fcd4de
+2025-10-14 17:43:08.202 +07:00 [INF] HTTP POST /api/Auth/register => 200 (7085.207 ms) | TraceId=40000023-0001-fe00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1",
+  "fullName": "Phạm Văn Tâm",
+  "email": "string",
+  "isActive": true
+} | Response={"success":true,"data":"Registered","message":null,"traceId":"40000023-0001-fe00-b63f-84710c7967bb","errors":null} | 40000023-0001-fe00-b63f-84710c7967bb f33500a44d47b0f671e6e3e41d43eafe
+2025-10-14 17:43:58.500 +07:00 [ERR] An unhandled exception has occurred. | 40000025-0001-fe00-b63f-84710c7967bb 59b09461ddf7c835509989019df9f6bc
+System.ArgumentOutOfRangeException: IDX10653: The encryption algorithm 'HS256' requires a key size of at least '128' bits. Key '[PII of type 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', is of size: '64'. (Parameter 'key')
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider..ctor(SecurityKey key, String algorithm, Boolean willCreateSignatures)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateSignatureProvider(SecurityKey key, String algorithm, Boolean willCreateSignatures, Boolean cacheProvider)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateForSigning(SecurityKey key, String algorithm, Boolean cacheProvider)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateForSigning(SecurityKey key, String algorithm)
+   at Microsoft.IdentityModel.JsonWebTokens.JwtTokenUtilities.CreateEncodedSignature(String input, SigningCredentials signingCredentials)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.WriteToken(SecurityToken token)
+   at eDocCore.Application.Features.Auth.Services.AuthService.LoginAsync(LoginRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.Application\Features\Auth\Services\AuthService.cs:line 114
+   at eDocCore.API.Controllers.AuthController.Login(LoginRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.API\Controllers\AuthController.cs:line 34
+   at lambda_method202(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.RoleAuthorizationMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\RoleAuthorizationMiddleware.cs:line 45
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.GlobalExceptionHandlerMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\GlobalExceptionHandlerMiddleware.cs:line 23
+2025-10-14 17:43:58.542 +07:00 [INF] HTTP POST /api/Auth/login => 500 (26097.019 ms) | TraceId=40000025-0001-fe00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1"
+} | Response={"error":"An internal server error has occurred."} | 40000025-0001-fe00-b63f-84710c7967bb 59b09461ddf7c835509989019df9f6bc
+2025-10-14 17:44:05.916 +07:00 [ERR] An unhandled exception has occurred. | 40000013-0003-fd00-b63f-84710c7967bb 59d85cf4c0ff221e62fadcfe57e78d64
+System.ArgumentOutOfRangeException: IDX10653: The encryption algorithm 'HS256' requires a key size of at least '128' bits. Key '[PII of type 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', is of size: '64'. (Parameter 'key')
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider..ctor(SecurityKey key, String algorithm, Boolean willCreateSignatures)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateSignatureProvider(SecurityKey key, String algorithm, Boolean willCreateSignatures, Boolean cacheProvider)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateForSigning(SecurityKey key, String algorithm, Boolean cacheProvider)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateForSigning(SecurityKey key, String algorithm)
+   at Microsoft.IdentityModel.JsonWebTokens.JwtTokenUtilities.CreateEncodedSignature(String input, SigningCredentials signingCredentials)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.WriteToken(SecurityToken token)
+   at eDocCore.Application.Features.Auth.Services.AuthService.LoginAsync(LoginRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.Application\Features\Auth\Services\AuthService.cs:line 114
+   at eDocCore.API.Controllers.AuthController.Login(LoginRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.API\Controllers\AuthController.cs:line 34
+   at lambda_method202(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.RoleAuthorizationMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\RoleAuthorizationMiddleware.cs:line 45
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.GlobalExceptionHandlerMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\GlobalExceptionHandlerMiddleware.cs:line 23
+2025-10-14 17:44:05.918 +07:00 [INF] HTTP POST /api/Auth/login => 500 (305.943 ms) | TraceId=40000013-0003-fd00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1"
+} | Response={"error":"An internal server error has occurred."} | 40000013-0003-fd00-b63f-84710c7967bb 59d85cf4c0ff221e62fadcfe57e78d64
+2025-10-14 17:45:47.645 +07:00 [ERR] An unhandled exception has occurred. | 4000001b-0000-fe00-b63f-84710c7967bb 546200709ba8c4b02fc935ffefef1b13
+eDocCore.Application.Common.Exceptions.ConflictException: Login name already exists
+   at eDocCore.Application.Features.Auth.Services.AuthService.RegisterAsync(RegisterUserRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.Application\Features\Auth\Services\AuthService.cs:line 40
+   at eDocCore.API.Controllers.AuthController.Register(RegisterUserRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.API\Controllers\AuthController.cs:line 26
+   at lambda_method6(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.RoleAuthorizationMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\RoleAuthorizationMiddleware.cs:line 45
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.GlobalExceptionHandlerMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\GlobalExceptionHandlerMiddleware.cs:line 23
+2025-10-14 17:45:47.773 +07:00 [INF] HTTP POST /api/Auth/register => 500 (2660.261 ms) | TraceId=4000001b-0000-fe00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1",
+  "fullName": "Phạm Văn Tâm",
+  "email": "string",
+  "isActive": true
+} | Response={"error":"An internal server error has occurred."} | 4000001b-0000-fe00-b63f-84710c7967bb 546200709ba8c4b02fc935ffefef1b13
+2025-10-14 17:46:06.482 +07:00 [INF] HTTP POST /api/Auth/register => 200 (617.234 ms) | TraceId=40000022-0006-fd00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1",
+  "fullName": "Phạm Văn Tâm",
+  "email": "string",
+  "isActive": true
+} | Response={"success":true,"data":"Registered","message":null,"traceId":"40000022-0006-fd00-b63f-84710c7967bb","errors":null} | 40000022-0006-fd00-b63f-84710c7967bb 12a89cd7639c963a92844f0440949458
+2025-10-14 17:46:12.969 +07:00 [ERR] An unhandled exception has occurred. | 4000001d-0000-fe00-b63f-84710c7967bb eebf9abd3b6d256bcb761ac1ebad2c08
+System.ArgumentOutOfRangeException: IDX10653: The encryption algorithm 'HS256' requires a key size of at least '128' bits. Key '[PII of type 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', is of size: '64'. (Parameter 'key')
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider..ctor(SecurityKey key, String algorithm, Boolean willCreateSignatures)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateSignatureProvider(SecurityKey key, String algorithm, Boolean willCreateSignatures, Boolean cacheProvider)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateForSigning(SecurityKey key, String algorithm, Boolean cacheProvider)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateForSigning(SecurityKey key, String algorithm)
+   at Microsoft.IdentityModel.JsonWebTokens.JwtTokenUtilities.CreateEncodedSignature(String input, SigningCredentials signingCredentials)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.WriteToken(SecurityToken token)
+   at eDocCore.Application.Features.Auth.Services.AuthService.LoginAsync(LoginRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.Application\Features\Auth\Services\AuthService.cs:line 114
+   at eDocCore.API.Controllers.AuthController.Login(LoginRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.API\Controllers\AuthController.cs:line 34
+   at lambda_method202(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.RoleAuthorizationMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\RoleAuthorizationMiddleware.cs:line 45
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.GlobalExceptionHandlerMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\GlobalExceptionHandlerMiddleware.cs:line 23
+2025-10-14 17:46:12.971 +07:00 [INF] HTTP POST /api/Auth/login => 500 (464.289 ms) | TraceId=4000001d-0000-fe00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1"
+} | Response={"error":"An internal server error has occurred."} | 4000001d-0000-fe00-b63f-84710c7967bb eebf9abd3b6d256bcb761ac1ebad2c08

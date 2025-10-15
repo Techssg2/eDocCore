@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using eDocCore.Domain.Entities;
@@ -17,12 +18,26 @@ namespace eDocCore.Infrastructure.Persistence.Repositories
 
         public async Task<List<User>> GetAllAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.AsNoTracking().ToListAsync();
         }
 
         public async Task<User?> GetByIdAsync(Guid id)
         {
             return await _context.Users.FindAsync(id);
+        }
+
+        public async Task<User?> GetByLoginNameAsync(string loginName)
+        {
+            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.LoginName == loginName);
+        }
+
+        public async Task<List<string>> GetRoleNamesAsync(Guid userId)
+        {
+            return await _context.UserRoles
+                .Where(ur => ur.UserId == userId)
+                .Select(ur => ur.Role.Name)
+                .Distinct()
+                .ToListAsync();
         }
 
         public async Task<Guid> AddAsync(User user)
@@ -31,7 +46,7 @@ namespace eDocCore.Infrastructure.Persistence.Repositories
             user.Created = DateTimeOffset.UtcNow;
             user.Modified = DateTimeOffset.UtcNow;
             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            // Defer SaveChanges to UnitOfWork.CommitAsync
             return user.Id;
         }
 
@@ -39,13 +54,13 @@ namespace eDocCore.Infrastructure.Persistence.Repositories
         {
             user.Modified = DateTimeOffset.UtcNow;
             _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            // Defer SaveChanges to UnitOfWork.CommitAsync
         }
 
         public async Task DeleteAsync(User user)
         {
             _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            // Defer SaveChanges to UnitOfWork.CommitAsync
         }
     }
 }

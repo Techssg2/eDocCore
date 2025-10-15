@@ -1,0 +1,37 @@
+﻿using System.Threading;
+using System.Threading.Tasks;
+using eDocCore.Application.Common.Models;
+using eDocCore.Application.Features.Auth.DTOs;
+using eDocCore.Application.Features.Auth.Services;
+using Microsoft.AspNetCore.Mvc;
+
+namespace eDocCore.API.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AuthController : ControllerBase
+    {
+        private readonly IAuthService _authService;
+
+        public AuthController(IAuthService authService)
+        {
+            _authService = authService;
+        }
+
+        [HttpPost("register")]
+        public async Task<ActionResult<ApiResult<string>>> Register([FromBody] RegisterUserRequest request, CancellationToken ct)
+        {
+            var ok = await _authService.RegisterAsync(request, ct);
+            if (!ok) return BadRequest(ApiResult<string>.Fail("Register failed", traceId: HttpContext.TraceIdentifier));
+            return Ok(ApiResult<string>.Ok("Registered", traceId: HttpContext.TraceIdentifier));
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<ApiResult<LoginResponse>>> Login([FromBody] LoginRequest request, CancellationToken ct)
+        {
+            var result = await _authService.LoginAsync(request, ct);
+            if (result == null) return Unauthorized(ApiResult<LoginResponse>.Fail("Invalid credentials", traceId: HttpContext.TraceIdentifier));
+            return Ok(ApiResult<LoginResponse>.Ok(result, traceId: HttpContext.TraceIdentifier));
+        }
+    }
+}

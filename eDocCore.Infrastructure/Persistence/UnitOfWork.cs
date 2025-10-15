@@ -18,19 +18,37 @@ namespace eDocCore.Infrastructure.Persistence
 
         public async Task BeginTransactionAsync()
         {
+            if (_transaction != null)
+            {
+                // already in a transaction
+                return;
+            }
             _transaction = await _context.Database.BeginTransactionAsync();
         }
 
         public async Task CommitAsync()
         {
+            // Persist pending changes, then commit transaction if any
+            await _context.SaveChangesAsync();
             if (_transaction != null)
+            {
                 await _transaction.CommitAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null;
+            }
         }
 
         public async Task RollbackAsync()
         {
             if (_transaction != null)
+            {
                 await _transaction.RollbackAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null;
+            }
+
+            // Clear tracked changes to avoid inconsistent state after rollback
+            _context.ChangeTracker.Clear();
         }
     }
 }

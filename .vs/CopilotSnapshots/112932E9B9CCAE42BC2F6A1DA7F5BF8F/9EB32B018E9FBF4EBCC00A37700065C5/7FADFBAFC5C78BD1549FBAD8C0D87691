@@ -1,0 +1,111 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using eDocCore.Application.Common.Exceptions;
+using eDocCore.Application.Common.Security;
+using eDocCore.Application.Features.Auth.DTOs;
+using eDocCore.Domain.Entities;
+using eDocCore.Domain.Interfaces.Extend;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+
+namespace eDocCore.Application.Features.Auth.Services
+{
+    public class AuthService : IAuthService
+    {
+        private readonly IUserRepository _userRepository;
+        private readonly IConfiguration _configuration;
+
+        public AuthService(IUserRepository userRepository, IConfiguration configuration)
+        {
+            _userRepository = userRepository;
+            _configuration = configuration;
+        }
+
+        public async Task<bool> RegisterAsync(RegisterUserRequest request, CancellationToken ct = default)
+        {
+            // check exists
+            var exists = await _userRepository.GetByLoginNameAsync(request.LoginName);
+            if (exists != null) throw new ConflictException("Login name already exists");
+
+            var user = new User
+            {
+                LoginName = request.LoginName,
+                Password = PasswordHasher.Hash(request.Password),
+                FullName = request.FullName,
+                Email = request.Email,
+                IsActive = request.IsActive,
+                Created = DateTimeOffset.UtcNow,
+                Modified = DateTimeOffset.UtcNow
+            };
+            await _userRepository.AddAsync(user);
+            return true;
+        }
+
+        public async Task<LoginResponse?> LoginAsync(LoginRequest request, CancellationToken ct = default)
+        {
+            var user = await _userRepository.GetByLoginNameAsync(request.LoginName);
+            if (user == null || string.IsNullOrEmpty(user.Password) || !PasswordHasher.Verify(user.Password, request.Password))
+            {
+                return null;
+            }
+            if (!user.IsActive)
+            {
+                throw new BusinessRuleException("User is inactive");
+            }
+
+            // Build JWT
+            var roles = await _userRepository.GetRoleNamesAsync(user.Id);
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.LoginName)
+            };
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var jwtSection = _configuration.GetSection("Jwt");
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection["Key"] ?? ""));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expiresMinutes = int.TryParse(jwtSection["ExpiresMinutes"], out var m) ? m : 60;
+            var expires = DateTimeOffset.UtcNow.AddMinutes(expiresMinutes);
+
+            var token = new JwtSecurityToken(
+                issuer: jwtSection["Issuer"],
+                audience: jwtSection["Audience"],
+                claims: claims,
+                notBefore: DateTime.UtcNow,
+                expires: expires.UtcDateTime,
+                signingCredentials: creds);
+
+            var handler = new JwtSecurityTokenHandler();
+            var accessToken = handler.WriteToken(token);
+
+            return new LoginResponse
+            {
+                AccessToken = accessToken,
+                ExpiresAt = expires
+            };
+        }
+
+        public async Task<bool> ChangePasswordAsync(string userId, ChangePasswordRequest request, CancellationToken ct = default)
+        {
+            if (!Guid.TryParse(userId, out var id)) throw new ValidationAppException("Invalid user id");
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null) throw new NotFoundAppException("User not found");
+            if (string.IsNullOrEmpty(user.Password) || !PasswordHasher.Verify(user.Password, request.CurrentPassword))
+                throw new BusinessRuleException("Current password is incorrect");
+
+            user.Password = PasswordHasher.Hash(request.NewPassword);
+            await _userRepository.UpdateAsync(user);
+            return true;
+        }
+    }
+}

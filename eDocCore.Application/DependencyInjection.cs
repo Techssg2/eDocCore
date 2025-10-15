@@ -6,9 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using eDocCore.Application.Behaviours;
 using eDocCore.Application.Features.Roles.Services;
+using eDocCore.Application.Features.Auth.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using eDocCore.Application.Features.Roles.Validators;
 
 namespace eDocCore.Application
 {
@@ -31,6 +33,9 @@ namespace eDocCore.Application
             // Application services (không CQRS)
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRoleValidator, RoleValidator>();
+
+            // Auth services
+            services.AddScoped<IAuthService, AuthService>();
 
             return services;
         }

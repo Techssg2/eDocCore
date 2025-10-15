@@ -1,9 +1,9 @@
-using eDocCore.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
 
-namespace eDocCore.Domain.Entities
+namespace eDocCore.Domain.Entities;
+
+public partial class Role : BaseEntity
 {
-    public partial class Role : BaseEntity
-    {
-        
-    }
+
 }

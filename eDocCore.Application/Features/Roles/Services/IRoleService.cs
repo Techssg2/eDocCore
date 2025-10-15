@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using eDocCore.Application.Common.Models;
+using eDocCore.Application.Features.Roles.DTOs.Request;
 
 namespace eDocCore.Application.Features.Roles.Services
 {
@@ -9,11 +10,11 @@ namespace eDocCore.Application.Features.Roles.Services
     {
         Task<IReadOnlyList<DTOs.RoleDto>> GetAllAsync();
         Task<DTOs.RoleDto?> GetByIdAsync(Guid id);
-        Task<DTOs.RoleDto> CreateAsync(DTOs.CreateRoleRequest request);
-        Task<bool> UpdateAsync(DTOs.UpdateRoleRequest request);
+        Task<DTOs.RoleDto> CreateAsync(CreateRoleRequest request);
+        Task<bool> UpdateAsync(UpdateRoleRequest request);
         Task<bool> DeleteAsync(Guid id);
 
         // Thêm API phân trang + filter
-        Task<PagedResult<DTOs.RoleDto>> GetPagedInternalAsync(DTOs.GetRolesRequest request, System.Threading.CancellationToken ct = default);
+        Task<PagedResult<DTOs.RoleDto>> GetPagedInternalAsync(GetRolesRequest request, System.Threading.CancellationToken ct = default);
     }
 }

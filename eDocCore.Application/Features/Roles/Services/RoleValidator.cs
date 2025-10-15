@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using eDocCore.Application.Features.Roles.Services;
 using eDocCore.Domain.Interfaces.Extend;
 
-namespace eDocCore.Application.Features.Roles.Services
+namespace eDocCore.Application.Features.Roles.Validators
 {
     public class RoleValidator : IRoleValidator
     {

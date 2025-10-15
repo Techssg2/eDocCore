@@ -1,0 +1,125 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using eDocCore.Application.Common.Exceptions;
+using eDocCore.Application.Common.Interfaces;
+using eDocCore.Application.Common.Security;
+using eDocCore.Application.Features.Auth.DTOs;
+using eDocCore.Domain.Entities;
+using eDocCore.Domain.Interfaces;
+using eDocCore.Domain.Interfaces.Extend;
+
+namespace eDocCore.Application.Features.Auth.Services
+{
+    public class AuthService : IAuthService
+    {
+        private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
+        private readonly IGenericRepository<UserRole> _userRole;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IJwtTokenService _jwt;
+
+        public AuthService(IUserRepository userRepository, IGenericRepository<UserRole> userRole, IRoleRepository roleRepository, IUnitOfWork unitOfWork, IJwtTokenService jwt)
+        {
+            _userRepository = userRepository;
+            _userRole = userRole;
+            _roleRepository = roleRepository;
+            _unitOfWork = unitOfWork;
+            _jwt = jwt;
+        }
+
+        public async Task<bool> RegisterAsync(RegisterUserRequest request, CancellationToken ct = default)
+        {
+            // basic email validation safeguard besides DataAnnotations
+            if (!string.IsNullOrWhiteSpace(request.Email))
+            {
+                try { _ = new System.Net.Mail.MailAddress(request.Email); }
+                catch { throw new ValidationAppException("Invalid email format", new[] { "Email is invalid" }); }
+            }
+
+            // check exists
+            var exists = await _userRepository.GetByLoginNameAsync(request.LoginName);
+            if (exists != null) throw new ConflictException("Login name already exists");
+
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var user = new User
+                {
+                    LoginName = request.LoginName,
+                    Password = PasswordHasher.Hash(request.Password),
+                    FullName = request.FullName,
+                    Email = request.Email,
+                    IsActive = request.IsActive,
+                    Created = DateTimeOffset.UtcNow,
+                    Modified = DateTimeOffset.UtcNow
+                };
+                await _userRepository.AddAsync(user);
+
+                var roleDefault = await _roleRepository.FirstOrDefaultAsync(x => x.Name == "Member");
+                if (roleDefault == null) throw new NotFoundAppException("Default role 'Member' not found");
+
+                var userRole = new UserRole { UserId = user.Id, RoleId = roleDefault.Id };
+                await _userRole.AddAsync(userRole);
+
+                await _unitOfWork.CommitAsync();
+                return true;
+            }
+            catch
+            {
+                await _unitOfWork.RollbackAsync();
+                throw;
+            }
+        }
+
+        public async Task<LoginResponse?> LoginAsync(LoginRequest request, CancellationToken ct = default)
+        {
+            var user = await _userRepository.GetByLoginNameAsync(request.LoginName);
+            if (user == null || string.IsNullOrEmpty(user.Password) || !PasswordHasher.Verify(user.Password, request.Password))
+            {
+                return null;
+            }
+            if (!user.IsActive)
+            {
+                throw new BusinessRuleException("User is inactive");
+            }
+
+            var roles = await _userRepository.GetRoleNamesAsync(user.Id);
+            return _jwt.GenerateToken(user, roles);
+        }
+
+        public async Task<bool> ChangePasswordAsync(string userId, ChangePasswordRequest request, CancellationToken ct = default)
+        {
+            if (!Guid.TryParse(userId, out var id)) throw new ValidationAppException("Invalid user id");
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null) throw new NotFoundAppException("User not found");
+            if (string.IsNullOrEmpty(user.Password) || !PasswordHasher.Verify(user.Password, request.CurrentPassword))
+                throw new BusinessRuleException("Current password is incorrect");
+
+            user.Password = PasswordHasher.Hash(request.NewPassword);
+            await _userRepository.UpdateAsync(user);
+            return true;
+        }
+
+        public async Task<CurrentUserResponse?> GetCurrentUserAsync(string userId, CancellationToken ct = default)
+        {
+            if (!Guid.TryParse(userId, out var id)) return null;
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null) return null;
+            var roles = await _userRepository.GetRoleNamesAsync(user.Id);
+            return new CurrentUserResponse
+            {
+                Id = user.Id,
+                LoginName = user.LoginName,
+                FullName = user.FullName,
+                Email = user.Email,
+                Roles = roles,
+                IsActive = user.IsActive
+            };
+        }
+    }
+}

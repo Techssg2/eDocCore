@@ -1,3 +1,4 @@
+using eDocCore.Application.Features.Roles.DTOs.Request;
 using FluentValidation;
 
 namespace eDocCore.Application.Features.Roles.DTOs

@@ -1,0 +1,119 @@
+2025-10-15 08:43:12.986 +07:00 [INF] HTTP POST /api/Auth/login => 401 (5272.042 ms) | TraceId=40000005-0003-ff00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "string"
+} | Response={"success":false,"data":null,"message":"Invalid credentials","traceId":"40000005-0003-ff00-b63f-84710c7967bb","errors":null} | 40000005-0003-ff00-b63f-84710c7967bb 52e5ffe141f18b1232abd080c4d77e22
+2025-10-15 08:43:40.855 +07:00 [ERR] An unhandled exception has occurred. | 40000006-0007-fe00-b63f-84710c7967bb 59c5d14dc4eb17c31e6bd6d4445a4312
+System.ArgumentOutOfRangeException: IDX10653: The encryption algorithm 'HS256' requires a key size of at least '128' bits. Key '[PII of type 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', is of size: '64'. (Parameter 'key')
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider..ctor(SecurityKey key, String algorithm, Boolean willCreateSignatures)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateSignatureProvider(SecurityKey key, String algorithm, Boolean willCreateSignatures, Boolean cacheProvider)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateForSigning(SecurityKey key, String algorithm, Boolean cacheProvider)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateForSigning(SecurityKey key, String algorithm)
+   at Microsoft.IdentityModel.JsonWebTokens.JwtTokenUtilities.CreateEncodedSignature(String input, SigningCredentials signingCredentials)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.WriteToken(SecurityToken token)
+   at eDocCore.Application.Features.Auth.Services.AuthService.LoginAsync(LoginRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.Application\Features\Auth\Services\AuthService.cs:line 114
+   at eDocCore.API.Controllers.AuthController.Login(LoginRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.API\Controllers\AuthController.cs:line 34
+   at lambda_method6(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.RoleAuthorizationMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\RoleAuthorizationMiddleware.cs:line 45
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.GlobalExceptionHandlerMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\GlobalExceptionHandlerMiddleware.cs:line 23
+2025-10-15 08:43:40.894 +07:00 [INF] HTTP POST /api/Auth/login => 500 (19009.196 ms) | TraceId=40000006-0007-fe00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1"
+} | Response={"error":"An internal server error has occurred."} | 40000006-0007-fe00-b63f-84710c7967bb 59c5d14dc4eb17c31e6bd6d4445a4312
+2025-10-15 08:44:13.058 +07:00 [ERR] An unhandled exception has occurred. | 40000007-0003-ff00-b63f-84710c7967bb 5dfabc463ba95f7adb0ef413964a8a8f
+System.ArgumentOutOfRangeException: IDX10653: The encryption algorithm 'HS256' requires a key size of at least '128' bits. Key '[PII of type 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', is of size: '64'. (Parameter 'key')
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider..ctor(SecurityKey key, String algorithm, Boolean willCreateSignatures)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateSignatureProvider(SecurityKey key, String algorithm, Boolean willCreateSignatures, Boolean cacheProvider)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateForSigning(SecurityKey key, String algorithm, Boolean cacheProvider)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateForSigning(SecurityKey key, String algorithm)
+   at Microsoft.IdentityModel.JsonWebTokens.JwtTokenUtilities.CreateEncodedSignature(String input, SigningCredentials signingCredentials)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.WriteToken(SecurityToken token)
+   at eDocCore.Application.Features.Auth.Services.AuthService.LoginAsync(LoginRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.Application\Features\Auth\Services\AuthService.cs:line 114
+   at eDocCore.API.Controllers.AuthController.Login(LoginRequest request, CancellationToken ct) in D:\SourceCode\eDocCore\eDocCore.API\Controllers\AuthController.cs:line 34
+   at lambda_method6(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.RoleAuthorizationMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\RoleAuthorizationMiddleware.cs:line 45
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at eDocCore.API.Middlewares.GlobalExceptionHandlerMiddleware.InvokeAsync(HttpContext context) in D:\SourceCode\eDocCore\eDocCore.API\Middlewares\GlobalExceptionHandlerMiddleware.cs:line 23
+2025-10-15 08:44:13.060 +07:00 [INF] HTTP POST /api/Auth/login => 500 (16014.948 ms) | TraceId=40000007-0003-ff00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1"
+} | Response={"error":"An internal server error has occurred."} | 40000007-0003-ff00-b63f-84710c7967bb 5dfabc463ba95f7adb0ef413964a8a8f
+2025-10-15 08:47:36.774 +07:00 [INF] HTTP POST /api/Auth/login => 200 (11635.55 ms) | TraceId=40000002-0000-fb00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1"
+} | Response={"success":true,"data":{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MmJhZDMyMy1lNjFhLTQyMDItYTJhZS02ZTQwZmNhZjU5YTAiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjQyYmFkMzIzLWU2MWEtNDIwMi1hMmFlLTZlNDBmY2FmNTlhMCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJUYW1QViIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsIm5iZiI6MTc2MDQ5Mjg1MiwiZXhwIjoxNzYwNDk2NDUyLCJpc3MiOiJUYW1QViIsImF1ZCI6ImVEb2NDb3JlIn0.Mr6OGS0R-Q7WDb328VshttsCLEhvgjhIcPn-1fpcHYQ","expiresAt":"2025-10-15T02:47:32.526125+00:00"},"message":null,"traceId":"40000002-0000-fb00-b63f-84710c7967bb","errors":null} | 40000002-0000-fb00-b63f-84710c7967bb ab807b96a889c52e32650e5ff1405691
+2025-10-15 08:57:04.424 +07:00 [INF] HTTP POST /api/Auth/login => 200 (5896.002 ms) | TraceId=4000000b-0003-ff00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1"
+} | Response={"success":true,"data":{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MmJhZDMyMy1lNjFhLTQyMDItYTJhZS02ZTQwZmNhZjU5YTAiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjQyYmFkMzIzLWU2MWEtNDIwMi1hMmFlLTZlNDBmY2FmNTlhMCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJUYW1QViIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsIm5iZiI6MTc2MDQ5MzQyNCwiZXhwIjoxNzYwNDk3MDI0LCJpc3MiOiJUYW1QViIsImF1ZCI6ImVEb2NDb3JlIn0.L7i1QzInuEQ9RdmiEJbcbdmFgSXXwAG6dhbUJG9HKaY","expiresAt":"2025-10-15T02:57:04.3064918+00:00"},"message":null,"traceId":"4000000b-0003-ff00-b63f-84710c7967bb","errors":null} | 4000000b-0003-ff00-b63f-84710c7967bb d96a624bd82052c4fd685524a605641e
+2025-10-15 08:57:16.712 +07:00 [INF] HTTP POST /api/Auth/login => 200 (62.806 ms) | TraceId=4000000d-0003-ff00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1"
+} | Response={"success":true,"data":{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MmJhZDMyMy1lNjFhLTQyMDItYTJhZS02ZTQwZmNhZjU5YTAiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjQyYmFkMzIzLWU2MWEtNDIwMi1hMmFlLTZlNDBmY2FmNTlhMCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJUYW1QViIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsIm5iZiI6MTc2MDQ5MzQzNiwiZXhwIjoxNzYwNDk3MDM2LCJpc3MiOiJUYW1QViIsImF1ZCI6ImVEb2NDb3JlIn0.FQt2eIGcteWvoz1rBaH6pzrA9gSTGM_dppCiV6_Haxw","expiresAt":"2025-10-15T02:57:16.7111329+00:00"},"message":null,"traceId":"4000000d-0003-ff00-b63f-84710c7967bb","errors":null} | 4000000d-0003-ff00-b63f-84710c7967bb 3295e141173450faf72ec469dcf4365f
+2025-10-15 08:57:18.210 +07:00 [INF] HTTP POST /api/Auth/login => 200 (115.347 ms) | TraceId=40000004-0005-fc00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1"
+} | Response={"success":true,"data":{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MmJhZDMyMy1lNjFhLTQyMDItYTJhZS02ZTQwZmNhZjU5YTAiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjQyYmFkMzIzLWU2MWEtNDIwMi1hMmFlLTZlNDBmY2FmNTlhMCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJUYW1QViIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsIm5iZiI6MTc2MDQ5MzQzOCwiZXhwIjoxNzYwNDk3MDM4LCJpc3MiOiJUYW1QViIsImF1ZCI6ImVEb2NDb3JlIn0.o3gULjKZntxT7rgDQi-MwEqBdG5Gw_P2g5vtdAY3QSk","expiresAt":"2025-10-15T02:57:18.2092429+00:00"},"message":null,"traceId":"40000004-0005-fc00-b63f-84710c7967bb","errors":null} | 40000004-0005-fc00-b63f-84710c7967bb 8c2e8850a803124a74f3a6d497042ee9
+2025-10-15 08:58:31.881 +07:00 [INF] HTTP GET /api/Auth/me => 401 (13.657 ms) | TraceId=40000007-0002-ff00-b63f-84710c7967bb | Request=null | Response=null | 40000007-0002-ff00-b63f-84710c7967bb 24a82f6aeb646f5c2af5fc5b21bd33e6
+2025-10-15 08:58:56.261 +07:00 [INF] HTTP GET /api/Auth/me => 401 (3.692 ms) | TraceId=40000009-0002-ff00-b63f-84710c7967bb | Request=null | Response=null | 40000009-0002-ff00-b63f-84710c7967bb 59ceb3424188aa88084738cf10bf8234
+2025-10-15 09:02:02.487 +07:00 [INF] HTTP POST /api/auth/login => 401 (56.055 ms) | TraceId=40000009-0001-fe00-b63f-84710c7967bb | Request={
+  "loginName": "string",
+  "password": "string"
+} | Response={"success":false,"data":null,"message":"Invalid credentials","traceId":"40000009-0001-fe00-b63f-84710c7967bb","errors":null} | 40000009-0001-fe00-b63f-84710c7967bb baf2c5b0ee633bee05f5d73bafa17c48
+2025-10-15 09:02:50.824 +07:00 [INF] HTTP POST /api/auth/login => 401 (17.151 ms) | TraceId=4000000a-0001-fe00-b63f-84710c7967bb | Request={
+  "loginName": "string",
+  "password": "string"
+} | Response={"success":false,"data":null,"message":"Invalid credentials","traceId":"4000000a-0001-fe00-b63f-84710c7967bb","errors":null} | 4000000a-0001-fe00-b63f-84710c7967bb 89203670a7f323b43babe0dd12ab8097
+2025-10-15 09:02:52.095 +07:00 [INF] HTTP POST /api/auth/login => 401 (8.402 ms) | TraceId=4000000b-0001-fe00-b63f-84710c7967bb | Request={
+  "loginName": "string",
+  "password": "string"
+} | Response={"success":false,"data":null,"message":"Invalid credentials","traceId":"4000000b-0001-fe00-b63f-84710c7967bb","errors":null} | 4000000b-0001-fe00-b63f-84710c7967bb 2b4f125477d219c3fefa8b3526f5464f
+2025-10-15 09:02:53.366 +07:00 [INF] HTTP POST /api/auth/login => 401 (19.196 ms) | TraceId=4000000c-0001-fe00-b63f-84710c7967bb | Request={
+  "loginName": "string",
+  "password": "string"
+} | Response={"success":false,"data":null,"message":"Invalid credentials","traceId":"4000000c-0001-fe00-b63f-84710c7967bb","errors":null} | 4000000c-0001-fe00-b63f-84710c7967bb 573042f953a8cb7b47f1917380fee746
+2025-10-15 09:03:06.696 +07:00 [INF] HTTP POST /api/auth/login => 200 (55.183 ms) | TraceId=4000000d-0001-fe00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1"
+} | Response={"success":true,"data":{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MmJhZDMyMy1lNjFhLTQyMDItYTJhZS02ZTQwZmNhZjU5YTAiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjQyYmFkMzIzLWU2MWEtNDIwMi1hMmFlLTZlNDBmY2FmNTlhMCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJUYW1QViIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsIm5iZiI6MTc2MDQ5Mzc4NiwiZXhwIjoxNzYwNDk3Mzg2LCJpc3MiOiJUYW1QViIsImF1ZCI6ImVEb2NDb3JlIn0.DgwykIlbfAYJxX4DI2HeS3Ir7J67835RjyO4E50PN7E","expiresAt":"2025-10-15T03:03:06.6956189+00:00"},"message":null,"traceId":"4000000d-0001-fe00-b63f-84710c7967bb","errors":null} | 4000000d-0001-fe00-b63f-84710c7967bb 12e29b848dc4fb8fac307ba8336d9646
+2025-10-15 09:03:32.735 +07:00 [INF] HTTP GET /api/auth/me => 401 (2.793 ms) | TraceId=4000000e-0001-fe00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1"
+} | Response=null | 4000000e-0001-fe00-b63f-84710c7967bb c9316be4136f02a888e6221b6190c0fe
+2025-10-15 09:03:37.224 +07:00 [INF] HTTP GET /api/auth/me => 401 (0.219 ms) | TraceId=4000000f-0001-fe00-b63f-84710c7967bb | Request=null | Response=null | 4000000f-0001-fe00-b63f-84710c7967bb 59dd3257d995ce331fb59e83b304a9e8
+2025-10-15 09:03:52.495 +07:00 [INF] HTTP GET /api/auth/me => 403 (72.39 ms) | TraceId=40000010-0001-fe00-b63f-84710c7967bb | Request=null | Response=null | 40000010-0001-fe00-b63f-84710c7967bb 3bc7bcfcb019d17b06ace8669313882f
+2025-10-15 09:04:14.639 +07:00 [INF] HTTP GET /api/auth/me => 403 (2.268 ms) | TraceId=40000011-0001-fe00-b63f-84710c7967bb | Request=null | Response=null | 40000011-0001-fe00-b63f-84710c7967bb dbfbf2fbb69d10d6995a2e2680044d49
+2025-10-15 09:04:28.308 +07:00 [INF] HTTP GET /api/auth/me => 403 (0.702 ms) | TraceId=40000012-0001-fe00-b63f-84710c7967bb | Request=null | Response=null | 40000012-0001-fe00-b63f-84710c7967bb 4cbcaef942ad5a27a3ffae815d70dfea
+2025-10-15 09:04:32.860 +07:00 [INF] HTTP GET /api/auth/me => 403 (0.777 ms) | TraceId=40000013-0001-fe00-b63f-84710c7967bb | Request=null | Response=null | 40000013-0001-fe00-b63f-84710c7967bb f30d128437614e386dd36881232724cf
+2025-10-15 09:05:05.928 +07:00 [INF] HTTP GET /api/auth/me => 403 (0.936 ms) | TraceId=40000014-0001-fe00-b63f-84710c7967bb | Request=null | Response=null | 40000014-0001-fe00-b63f-84710c7967bb 5a02d9d7942b5653e8a95b58c6c7e526
+2025-10-15 09:06:13.480 +07:00 [INF] HTTP GET /api/auth/me => 403 (146.264 ms) | IP=::1 | TraceId=40000010-0002-ff00-b63f-84710c7967bb | Request=null | Response=null | 40000010-0002-ff00-b63f-84710c7967bb 886bd83fbde30f593f6135445761b881
+2025-10-15 09:06:21.176 +07:00 [INF] HTTP POST /api/auth/login => 200 (2553.352 ms) | IP=::1 | TraceId=40000011-0002-ff00-b63f-84710c7967bb | Request={
+  "loginName": "TamPV",
+  "password": "Matkhau1"
+} | Response={"success":true,"data":{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MmJhZDMyMy1lNjFhLTQyMDItYTJhZS02ZTQwZmNhZjU5YTAiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjQyYmFkMzIzLWU2MWEtNDIwMi1hMmFlLTZlNDBmY2FmNTlhMCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJUYW1QViIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1lbWJlciIsIm5iZiI6MTc2MDQ5Mzk4MSwiZXhwIjoxNzYwNDk3NTgxLCJpc3MiOiJUYW1QViIsImF1ZCI6ImVEb2NDb3JlIn0.ftWdkwo_oUq77K_HYLlT28P70ZUCo8CbT7WDl0wIjo0","expiresAt":"2025-10-15T03:06:21.1280912+00:00"},"message":null,"traceId":"40000011-0002-ff00-b63f-84710c7967bb","errors":null} | 40000011-0002-ff00-b63f-84710c7967bb 340daee120dd55fa1e269b6a5b28d81c
+2025-10-15 09:06:23.534 +07:00 [INF] HTTP GET /api/auth/me => 403 (3.754 ms) | IP=::1 | TraceId=40000012-0002-ff00-b63f-84710c7967bb | Request=null | Response=null | 40000012-0002-ff00-b63f-84710c7967bb cae1171c8fc9f47673e3f8b6ddf55a2d
+2025-10-15 09:06:26.316 +07:00 [INF] HTTP GET /api/auth/me => 403 (2.034 ms) | IP=::1 | TraceId=40000013-0002-ff00-b63f-84710c7967bb | Request=null | Response=null | 40000013-0002-ff00-b63f-84710c7967bb 8e809110efde6fd46b9a53a49ff7aa10
+2025-10-15 09:06:36.273 +07:00 [INF] HTTP GET /api/auth/me => 403 (1.337 ms) | IP=::1 | TraceId=40000014-0002-ff00-b63f-84710c7967bb | Request=null | Response=null | 40000014-0002-ff00-b63f-84710c7967bb 736e648f6f78bfe4333ca2ea4b7a25ad
+2025-10-15 09:08:24.601 +07:00 [INF] HTTP GET /api/auth/me => 200 (15826.956 ms) | IP=::1 | TraceId=4000000d-0004-fc00-b63f-84710c7967bb | Request=null | Response={"success":true,"data":{"id":"42bad323-e61a-4202-a2ae-6e40fcaf59a0","loginName":"TamPV","fullName":"Phạm Văn Tâm","email":"string","roles":["Member"],"isActive":true},"message":null,"traceId":"4000000d-0004-fc00-b63f-84710c7967bb","errors":null} | 4000000d-0004-fc00-b63f-84710c7967bb 508fadbf098a8ff33b20b78d6c559e0b
+2025-10-15 09:08:41.425 +07:00 [INF] HTTP GET /api/auth/me => 200 (91.996 ms) | IP=::1 | TraceId=40000003-0002-fe00-b63f-84710c7967bb | Request=null | Response={"success":true,"data":{"id":"42bad323-e61a-4202-a2ae-6e40fcaf59a0","loginName":"TamPV","fullName":"Phạm Văn Tâm","email":"string","roles":["Member"],"isActive":true},"message":null,"traceId":"40000003-0002-fe00-b63f-84710c7967bb","errors":null} | 40000003-0002-fe00-b63f-84710c7967bb fbc93d46772e602cabe152adae5962d4
+2025-10-15 09:08:41.426 +07:00 [INF] HTTP GET /api/auth/me => 200 (7732.103 ms) | IP=::1 | TraceId=4000000e-0004-fc00-b63f-84710c7967bb | Request=null | Response= | 4000000e-0004-fc00-b63f-84710c7967bb f4b25b025fc506ea8c3546546ec2bc73

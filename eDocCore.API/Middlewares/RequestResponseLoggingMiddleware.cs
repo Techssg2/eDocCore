@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Serilog.Context;
 
 namespace eDocCore.API.Middlewares
 {
@@ -34,6 +35,12 @@ namespace eDocCore.API.Middlewares
             }
 
             var start = DateTimeOffset.UtcNow;
+
+            // Determine client IP (favor proxy headers if present)
+            var clientIp = GetClientIp(context);
+
+            // Add ClientIp to Serilog context so it appears in all log events in this request
+            using var _ = LogContext.PushProperty("ClientIp", clientIp);
 
             // Capture request body
             string? requestBody = null;
@@ -72,15 +79,32 @@ namespace eDocCore.API.Middlewares
 
                 var duration = DateTimeOffset.UtcNow - start;
                 _logger.LogInformation(
-                    "HTTP {Method} {Path} => {StatusCode} ({Duration} ms) | TraceId={TraceId} | Request={RequestBody} | Response={ResponseBody}",
+                    "HTTP {Method} {Path} => {StatusCode} ({Duration} ms) | IP={ClientIp} | TraceId={TraceId} | Request={RequestBody} | Response={ResponseBody}",
                     context.Request.Method,
                     context.Request.Path,
                     context.Response.StatusCode,
                     duration.TotalMilliseconds.ToString("0.###"),
+                    clientIp,
                     context.TraceIdentifier,
                     requestBody,
                     responseBody);
             }
+        }
+
+        private static string GetClientIp(HttpContext context)
+        {
+            // X-Forwarded-For may contain a list: client, proxy1, proxy2... take first
+            var xff = context.Request.Headers["X-Forwarded-For"].ToString();
+            if (!string.IsNullOrWhiteSpace(xff))
+            {
+                var first = xff.Split(',')[0].Trim();
+                if (!string.IsNullOrEmpty(first)) return first;
+            }
+
+            var xRealIp = context.Request.Headers["X-Real-IP"].ToString();
+            if (!string.IsNullOrWhiteSpace(xRealIp)) return xRealIp.Trim();
+
+            return context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
         }
 
         private static string Truncate(string input, int maxBytes)
