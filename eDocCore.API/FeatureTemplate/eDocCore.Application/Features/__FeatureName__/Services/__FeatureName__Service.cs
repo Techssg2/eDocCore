@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using eDocCore.API.FeatureTemplate.eDocCore.Domain.Interfaces.Extends;
+using eDocCore.API.FeatureTemplate.eDocCore.Application.Features.__FeatureName__.DTOs;
+using eDocCore.API.FeatureTemplate.eDocCore.Application.Features.__FeatureName__.DTOs.Request;
+using eDocCore.API.FeatureTemplate.eDocCore.Domain.Entities.Partial;
+using eDocCore.API.FeatureTemplate.eDocCore.Domain.Interfaces.Extend;
 using eDocCore.Application.Common.Interfaces;
 using eDocCore.Application.Common.Models;
-using eDocCore.Application.Features.__FeatureName__.DTOs;
-using eDocCore.Application.Features.__FeatureName__.DTOs.Request;
-using eDocCore.Domain.Entities;
 using eDocCore.Domain.Interfaces;
 using System.Linq.Expressions;
 
-namespace eDocCore.Application.Features.__FeatureName__.Services
+namespace eDocCore.API.FeatureTemplate.eDocCore.Application.Features.__FeatureName__.Services
 {
     public class __FeatureName__Service : I__FeatureName__Service
     {

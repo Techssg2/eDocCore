@@ -1,4 +1,4 @@
-namespace eDocCore.Application.Features.UserRole.DTOs.Request
+namespace eDocCore.Application.Features.UserRoles.DTOs.Request
 {
     public class UpdateUserRoleRequest
     {

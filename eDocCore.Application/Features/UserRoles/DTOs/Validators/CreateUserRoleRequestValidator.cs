@@ -1,4 +1,4 @@
-namespace eDocCore.Application.Features.UserRole.DTOs.Validators
+namespace eDocCore.Application.Features.UserRoles.DTOs.Validators
 {
     public class CreateUserRoleRequestValidator
     {

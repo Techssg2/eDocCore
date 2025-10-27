@@ -1,17 +1,18 @@
 using AutoMapper;
-using eDocCore.Application.Features.UserRole.DTOs.Request;
 using eDocCore.Application.Features.Roles.DTOs.Request;
 using eDocCore.Domain.Entities;
+using eDocCore.Application.Features.UserRoles.DTOs;
+using eDocCore.Application.Features.UserRoles.DTOs.Request;
 
-namespace eDocCore.Application.Features.UserRole.Mapping
+namespace eDocCore.Application.Features.UserRoles.Mapping
 {
     public class UserRoleMappingProfile : Profile
     {
         public UserRoleMappingProfile()
         {
-            CreateMap<eDocCore.Domain.Entities.UserRole, DTOs.UserRoleDto>();
-            CreateMap<CreateUserRoleRequest, eDocCore.Domain.Entities.UserRole>();
-            CreateMap<UpdateUserRoleRequest, eDocCore.Domain.Entities.UserRole>();
+            CreateMap<UserRole, UserRoleDto>();
+            CreateMap<CreateUserRoleRequest, UserRole>();
+            CreateMap<UpdateUserRoleRequest, UserRole>();
         }
     }
 }

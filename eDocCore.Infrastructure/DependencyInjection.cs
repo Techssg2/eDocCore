@@ -1,5 +1,4 @@
-﻿using eDocCore.Domain.Entities;
-using eDocCore.Domain.Interfaces;
+﻿using eDocCore.Domain.Interfaces;
 using eDocCore.Domain.Interfaces.Extend;
 using eDocCore.Infrastructure.Persistence;
 using eDocCore.Infrastructure.Persistence.Repositories;

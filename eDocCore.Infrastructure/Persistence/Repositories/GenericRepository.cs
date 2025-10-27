@@ -1,6 +1,5 @@
 ﻿using eDocCore.Domain.Entities;
 using eDocCore.Domain.Interfaces;
-using eDocCore.Infrastructure.Persistence; // explicit for ApplicationDbContext
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

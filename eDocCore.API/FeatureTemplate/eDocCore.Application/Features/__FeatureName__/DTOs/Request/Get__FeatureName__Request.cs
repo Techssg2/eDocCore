@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace eDocCore.Application.Features.__FeatureName__.DTOs.Request
+namespace eDocCore.API.FeatureTemplate.eDocCore.Application.Features.__FeatureName__.DTOs.Request
 {
     public class Get__FeatureName__Request
     {

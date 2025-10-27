@@ -1,4 +1,3 @@
-using eDocCore.Domain.Entities;
 using eDocCore.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;

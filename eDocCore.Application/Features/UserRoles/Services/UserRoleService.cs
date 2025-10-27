@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using eDocCore.API.FeatureTemplate.eDocCore.Domain.Interfaces.Extends;
 using eDocCore.Application.Common.Interfaces;
 using eDocCore.Application.Common.Models;
-using eDocCore.Application.Features.UserRole.DTOs;
-using eDocCore.Application.Features.UserRole.DTOs.Request;
+using eDocCore.Application.Features.UserRoles.DTOs;
+using eDocCore.Application.Features.UserRoles.DTOs.Request;
 using eDocCore.Domain.Entities;
 using eDocCore.Domain.Interfaces;
+using eDocCore.Domain.Interfaces.Extend;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
-namespace eDocCore.Application.Features.UserRole.Services
+namespace eDocCore.Application.Features.UserRoles.Services
 {
     public class UserRoleService : IUserRoleService
     {
@@ -51,7 +51,7 @@ namespace eDocCore.Application.Features.UserRole.Services
             try
             {
                 
-                var UserRole = _mapper.Map<eDocCore.Domain.Entities.UserRole>(request);
+                var UserRole = _mapper.Map<UserRole>(request);
                 UserRole = await _UserRoleRepository.AddAsync(UserRole);
 
                 await _unitOfWork.CommitAsync();

@@ -1,4 +1,4 @@
-namespace eDocCore.Application.Features.UserRole.Services
+namespace eDocCore.Application.Features.UserRoles.Services
 {
     public class UserRoleValidator : IUserRoleValidator
     {

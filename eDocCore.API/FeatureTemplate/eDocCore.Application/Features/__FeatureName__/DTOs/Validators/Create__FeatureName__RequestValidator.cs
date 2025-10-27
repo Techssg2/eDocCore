@@ -1,4 +1,4 @@
-namespace eDocCore.Application.Features.__FeatureName__.DTOs.Validators
+namespace eDocCore.API.FeatureTemplate.eDocCore.Application.Features.__FeatureName__.DTOs.Validators
 {
     public class Create__FeatureName__RequestValidator
     {

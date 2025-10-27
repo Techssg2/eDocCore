@@ -1,7 +1,7 @@
 ﻿using eDocCore.Domain.Entities;
 using eDocCore.Domain.Interfaces;
 
-namespace eDocCore.API.FeatureTemplate.eDocCore.Domain.Interfaces.Extends
+namespace eDocCore.Domain.Interfaces.Extend
 {
     public interface IUserRoleRepository : IGenericRepository<UserRole>
     {

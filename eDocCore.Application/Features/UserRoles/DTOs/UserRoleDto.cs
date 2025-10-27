@@ -1,4 +1,4 @@
-namespace eDocCore.Application.Features.UserRole.DTOs
+namespace eDocCore.Application.Features.UserRoles.DTOs
 {
     public class UserRoleDto
     {

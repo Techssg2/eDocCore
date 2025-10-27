@@ -10,7 +10,6 @@ using eDocCore.Application.Features.Auth.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using eDocCore.Application.Features.Roles.Validators;
 
 namespace eDocCore.Application
 {
