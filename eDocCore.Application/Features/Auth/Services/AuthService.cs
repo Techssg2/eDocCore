@@ -17,11 +17,11 @@ namespace eDocCore.Application.Features.Auth.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
-        private readonly IGenericRepository<UserRole> _userRole;
+        private readonly IGenericRepository<eDocCore.Domain.Entities.UserRole> _userRole;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IJwtTokenService _jwt;
 
-        public AuthService(IUserRepository userRepository, IGenericRepository<UserRole> userRole, IRoleRepository roleRepository, IUnitOfWork unitOfWork, IJwtTokenService jwt)
+        public AuthService(IUserRepository userRepository, IGenericRepository<eDocCore.Domain.Entities.UserRole> userRole, IRoleRepository roleRepository, IUnitOfWork unitOfWork, IJwtTokenService jwt)
         {
             _userRepository = userRepository;
             _userRole = userRole;
@@ -54,7 +54,7 @@ namespace eDocCore.Application.Features.Auth.Services
                 var roleDefault = await _roleRepository.FirstOrDefaultAsync(x => x.Name == "Member");
                 if (roleDefault == null) throw new NotFoundAppException("Default role 'Member' not found");
 
-                var userRole = new UserRole { UserId = user.Id, RoleId = roleDefault.Id };
+                var userRole = new eDocCore.Domain.Entities.UserRole { UserId = user.Id, RoleId = roleDefault.Id };
                 await _userRole.AddAsync(userRole);
 
                 await _unitOfWork.CommitAsync();

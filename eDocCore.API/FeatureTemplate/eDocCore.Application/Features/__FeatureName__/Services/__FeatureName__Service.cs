@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using eDocCore.API.FeatureTemplate.eDocCore.Domain.Entities;
 using eDocCore.API.FeatureTemplate.eDocCore.Domain.Interfaces.Extends;
 using eDocCore.Application.Common.Interfaces;
 using eDocCore.Application.Common.Models;
 using eDocCore.Application.Features.__FeatureName__.DTOs;
 using eDocCore.Application.Features.__FeatureName__.DTOs.Request;
+using eDocCore.Domain.Entities;
 using eDocCore.Domain.Interfaces;
 using System.Linq.Expressions;
 

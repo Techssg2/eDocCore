@@ -3,7 +3,7 @@ using eDocCore.Domain.Interfaces;
 
 namespace eDocCore.API.FeatureTemplate.eDocCore.Domain.Interfaces.Extends
 {
-    public interface I__FeatureName__Repository : IGenericRepository<__ModelName__>
+    public interface IUserRoleRepository : IGenericRepository<UserRole>
     {
          
     }

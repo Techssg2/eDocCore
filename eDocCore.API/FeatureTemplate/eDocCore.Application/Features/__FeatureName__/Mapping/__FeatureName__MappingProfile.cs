@@ -1,5 +1,4 @@
 using AutoMapper;
-using eDocCore.API.FeatureTemplate.eDocCore.Domain.Entities;
 using eDocCore.Application.Features.__FeatureName__.DTOs.Request;
 using eDocCore.Application.Features.Roles.DTOs.Request;
 using eDocCore.Domain.Entities;
