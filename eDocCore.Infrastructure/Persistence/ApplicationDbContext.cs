@@ -33,10 +33,12 @@ public partial class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Note: Id generation strategy is application-side GUIDs. Repositories will set Id when empty.
         modelBuilder.Entity<Role>(entity =>
         {
             entity.ToTable("Role");
 
+            // Using ValueGeneratedNever because application creates GUID Ids before insert.
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Name).HasMaxLength(100);
 
@@ -46,6 +48,7 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
+            // Using ValueGeneratedNever because application creates GUID Ids before insert.
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
@@ -64,6 +67,7 @@ public partial class ApplicationDbContext : DbContext
         {
             entity.ToTable("UserRole");
 
+            // Using ValueGeneratedNever because application creates GUID Ids before insert.
             entity.Property(e => e.Id).ValueGeneratedNever();
 
             entity.HasOne(d => d.Role).WithMany(p => p.UserRoles)
