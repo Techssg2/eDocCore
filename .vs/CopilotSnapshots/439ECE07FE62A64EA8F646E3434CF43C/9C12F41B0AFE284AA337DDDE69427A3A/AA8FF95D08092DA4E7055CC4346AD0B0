@@ -1,0 +1,18 @@
+﻿// Chạy lệnh generate database
+dotnet ef dbcontext scaffold "Server=.;Database=eDocCoreDB;User Id=sa;Password=Matkhau1;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -o ../eDocCore.Domain/Entities --context-dir Persistence --context ApplicationDbContext -f --project eDocCore.Infrastructure --namespace eDocCore.Domain.Entities
+
+
+dotnet new --list
+// Auto generate template
+// 1. Cài đặt template (chạy 1 lần duy nhất)
+dotnet new --install ./FeatureTemplate
+
+// 2. Gỡ template nếu cần cài lại
+dotnet new --uninstall eDocCore.FeatureTemplate
+
+// 3. Sử dụng template để sinh feature mới
+// Sinh các file Application
+dotnet new feature --FeatureName TenFeature --output .\eDocCore.Application\Features\TenFeature
+
+// Sinh file Controller
+dotnet new feature --FeatureName TenFeature --output .\eDocCore.API\Controllers

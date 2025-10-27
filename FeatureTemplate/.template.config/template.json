@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "YourName",
+  "classifications": [ "Feature", "API", "Service" ],
+  "name": "Feature Template",
+  "identity": "eDocCore.FeatureTemplate",
+  "shortName": "feature",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "Roles",
+  "preferNameDirectory": true,
+  "symbols": {
+    "FeatureName": {
+      "type": "parameter",
+      "datatype": "string",
+      "replaces": "__FeatureName__",
+      "defaultValue": "Sample"
+    }
+  }
+}

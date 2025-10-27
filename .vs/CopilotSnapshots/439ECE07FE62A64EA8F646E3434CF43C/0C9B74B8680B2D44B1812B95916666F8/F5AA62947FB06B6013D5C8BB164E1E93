@@ -1,0 +1,53 @@
+﻿# Hướng dẫn sử dụng Template sinh Feature tự động
+
+Đây là hướng dẫn để cài đặt và sử dụng template `dotnet new` nhằm tự động hóa việc tạo các file và folder cho một feature mới trong dự án eDocCore.
+
+## 1. Cài đặt Template (Chỉ chạy 1 lần)
+
+Mở terminal tại thư mục gốc của dự án (`D:\SourceCode\eDocCore`) và chạy lệnh sau:
+
+```powershell
+dotnet new --install ./_template
+```
+
+Lệnh này sẽ đăng ký template có tên `edocfeature` vào máy của bạn.
+
+## 2. Gỡ Template (Nếu cần cài lại)
+
+Nếu bạn muốn cập nhật hoặc cài đặt lại template, hãy chạy lệnh sau để gỡ phiên bản cũ:
+
+```powershell
+dotnet new --uninstall eDocCore.Feature
+```
+
+Sau đó, bạn có thể chạy lại lệnh cài đặt ở bước 1.
+
+## 3. Sử dụng Template để sinh Feature mới
+
+Để tạo một feature mới, hãy chạy các lệnh sau. Ví dụ, chúng ta sẽ tạo feature `Document`.
+
+### a. Sinh các file cho tầng Application
+
+Di chuyển vào thư mục `eDocCore.Application` và chạy lệnh:
+
+```powershell
+cd eDocCore.Application
+dotnet new edocfeature --name Document
+cd ..
+```
+
+Lệnh này sẽ tạo ra thư mục `Features\Document` với đầy đủ các file con (DTOs, Services, Mapping...).
+
+### b. Sinh file Controller cho tầng API
+
+Di chuyển vào thư mục `eDocCore.API` và chạy lệnh:
+
+```powershell
+cd eDocCore.API
+dotnet new edocfeature --name Document
+cd ..
+```
+
+Lệnh này sẽ tạo ra file `Controllers\DocumentController.cs`.
+
+**Lưu ý:** Template được thiết kế để chạy từ bên trong các thư mục dự án con (`eDocCore.Application`, `eDocCore.API`) để đảm bảo namespace và vị trí file được sinh ra chính xác.
