@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using eDocCore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using eDocCore.Domain.Entities;
 
 namespace eDocCore.Infrastructure.Persistence;
 
@@ -16,6 +16,8 @@ public partial class ApplicationDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Department> Departments { get; set; }
+
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -23,32 +25,27 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        // Do not override DI configuration. Fallback only if not configured.
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer("Name=DefaultConnection");
-        }
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.;Database=eDocCoreDB;User Id=sa;Password=Matkhau1;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Note: Id generation strategy is application-side GUIDs. Repositories will set Id when empty.
+        modelBuilder.Entity<Department>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Name).HasMaxLength(100);
+        });
+
         modelBuilder.Entity<Role>(entity =>
         {
             entity.ToTable("Role");
 
-            // Using ValueGeneratedNever because application creates GUID Ids before insert.
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Name).HasMaxLength(100);
-
-            // Unique index on role name
-            entity.HasIndex(e => e.Name).IsUnique();
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            // Using ValueGeneratedNever because application creates GUID Ids before insert.
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
@@ -58,16 +55,12 @@ public partial class ApplicationDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.Password).HasMaxLength(255);
-
-            // Unique index on login name
-            entity.HasIndex(e => e.LoginName).IsUnique();
         });
 
         modelBuilder.Entity<UserRole>(entity =>
         {
             entity.ToTable("UserRole");
 
-            // Using ValueGeneratedNever because application creates GUID Ids before insert.
             entity.Property(e => e.Id).ValueGeneratedNever();
 
             entity.HasOne(d => d.Role).WithMany(p => p.UserRoles)
@@ -79,9 +72,6 @@ public partial class ApplicationDbContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserRole_Users");
-
-            // Unique composite to prevent duplicate assignments
-            entity.HasIndex(e => new { e.UserId, e.RoleId }).IsUnique();
         });
 
         OnModelCreatingPartial(modelBuilder);
