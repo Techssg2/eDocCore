@@ -6,7 +6,12 @@
     <Project Path="eDocCore.Domain/eDocCore.Domain.csproj" />
     <Project Path="eDocCore.Infrastructure/eDocCore.Infrastructure.csproj" />
   </Folder>
-  <Folder Name="/eDocCore.UI/" />
+  <Folder Name="/eDocCore.UI/">
+    <Project Path="eDocCore.UI/eDocCore.Client.UI/eDocCore.Client.UI.esproj">
+      <Build />
+      <Deploy />
+    </Project>
+  </Folder>
   <Folder Name="/eDocCore.UnitTest/">
     <Project Path="eDocCore.Tests/eDocCore.Tests.csproj" Id="b7f488ff-ff5f-4893-88d2-c36203d4e076" />
   </Folder>
