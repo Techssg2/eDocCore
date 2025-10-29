@@ -30,6 +30,10 @@ namespace eDocCore.Infrastructure.Persistence.Repositories
         {
             return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.LoginName == loginName);
         }
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => !string.IsNullOrEmpty(u.Email) && u.Email.ToLower().Equals(email.ToLower()) );
+        }
 
         public async Task<List<string>> GetRoleNamesAsync(Guid userId)
         {

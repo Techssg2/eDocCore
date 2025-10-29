@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using eDocCore.Application.Common;
 using eDocCore.Application.Common.Exceptions;
 using eDocCore.Application.Common.Interfaces;
 using eDocCore.Application.Common.Security;
@@ -10,6 +7,10 @@ using eDocCore.Application.Features.Auth.DTOs.Response;
 using eDocCore.Domain.Entities;
 using eDocCore.Domain.Interfaces;
 using eDocCore.Domain.Interfaces.Extend;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace eDocCore.Application.Features.Auth.Services
 {
@@ -30,12 +31,12 @@ namespace eDocCore.Application.Features.Auth.Services
             _jwt = jwt;
         }
 
-        public async Task<bool> RegisterAsync(RegisterUserRequest request, CancellationToken ct = default)
+        public async Task<ResultDTO<bool>> RegisterAsync(RegisterUserRequest request, CancellationToken ct = default)
         {
-            // Logic nghiệp vụ: Kiểm tra sự tồn tại của người dùng
-            await EnsureUserDoesNotExist(request.LoginName);
+            var validationResult = await ValidationDataRegister(request);
+            if (!validationResult.IsSuccess)
+                return validationResult;
 
-            await _unitOfWork.BeginTransactionAsync();
             try
             {
                 // Tạo người dùng
@@ -46,19 +47,28 @@ namespace eDocCore.Application.Features.Auth.Services
                 await AssignDefaultRole(user.Id);
 
                 await _unitOfWork.CommitAsync();
-                return true;
+                return ResultDTO<bool>.Success(true, "Register Successfully!");
             }
-            catch
+            catch (Exception ex)
             {
                 await _unitOfWork.RollbackAsync();
-                throw;
+                return ResultDTO<bool>.Failure(new List<string>() { ex.Message });
             }
         }
 
-        private async Task EnsureUserDoesNotExist(string loginName)
+        private async Task<ResultDTO<bool>> ValidationDataRegister(RegisterUserRequest request)
         {
-            var exists = await _userRepository.GetByLoginNameAsync(loginName);
-            if (exists != null) throw new ConflictException("Login name already exists");
+            List<string> errorMessages = new List<string>();
+            var existingUser = await _userRepository.GetByLoginNameAsync(request.LoginName);
+            // Kiểm tra LoginName
+            if (existingUser != null)
+                errorMessages.Add("Login name already exists");
+
+            existingUser = await _userRepository.GetByEmailAsync(request.Email);
+            if (existingUser != null)
+                errorMessages.Add("Email already exists");
+
+            return errorMessages.Any() ? ResultDTO<bool>.Failure(errorMessages) : ResultDTO<bool>.Success(true);
         }
 
         private User CreateUser(RegisterUserRequest request)
@@ -78,7 +88,7 @@ namespace eDocCore.Application.Features.Auth.Services
         private async Task AssignDefaultRole(Guid userId)
         {
             var roleDefault = await _roleRepository.FirstOrDefaultAsync(x => x.Name == "Member");
-            if (roleDefault == null) throw new NotFoundAppException("Default role 'Member' not found");
+            if (roleDefault == null) throw new BusinessRuleException("Default role 'Member' not found");
 
             var userRole = new UserRole { UserId = userId, RoleId = roleDefault.Id };
             await _userRole.AddAsync(userRole);

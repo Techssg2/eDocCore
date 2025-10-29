@@ -10,7 +10,7 @@ namespace eDocCore.Application.Common.Models
         public string? TraceId { get; init; }
         public IReadOnlyList<string>? Errors { get; init; }
 
-        public static ApiResult<T> Ok(T data, string? message = null, string? traceId = null)
+        public static ApiResult<T> Ok(T? data, string? message = null, string? traceId = null)
             => new ApiResult<T> { Success = true, Data = data, Message = message, TraceId = traceId };
 
         public static ApiResult<T> Fail(string message, IReadOnlyList<string>? errors = null, string? traceId = null)

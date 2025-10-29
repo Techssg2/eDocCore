@@ -10,6 +10,7 @@ namespace eDocCore.Domain.Interfaces.Extend
         Task<List<User>> GetAllAsync();
         Task<User?> GetByIdAsync(Guid id);
         Task<User?> GetByLoginNameAsync(string loginName);
+        Task<User?> GetByEmailAsync(string email);
         Task<List<string>> GetRoleNamesAsync(Guid userId);
         Task<Guid> AddAsync(User user);
         Task UpdateAsync(User user);
