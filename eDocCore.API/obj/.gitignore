@@ -3,3 +3,4 @@
 /eDocCore.API.csproj.nuget.g.targets
 /project.assets.json
 /project.nuget.cache
+*.EntityFrameworkCore.targets

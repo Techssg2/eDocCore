@@ -4,7 +4,7 @@ using eDocCore.Domain.Interfaces.Extend;
 
 namespace eDocCore.Domain.Entities
 {
-    public partial class __ModelName__ : IAuditableEntity
+    public partial class UserDepartmentMapping : IAuditableEntity
     {
         
     }
