@@ -72,12 +72,17 @@ namespace eDocCore.Application.Features.UserRoles.Services
             {
                 _logger.LogInformation("Updating UserRole {UserRoleId} by {UserId}", request.Id, _currentUser.UserId);
                 var existing = await _UserRoleRepository.GetByIdAsync(request.Id);
-                _mapper.Map(request, existing);
-                await _UserRoleRepository.UpdateAsync(existing);
+                if (existing != null)
+                {
+                    _mapper.Map(request, existing);
+                    await _UserRoleRepository.UpdateAsync(existing);
 
-                await _unitOfWork.CommitAsync();
-                _logger.LogInformation("Updated UserRole {UserRoleId} by {UserId}", request.Id, _currentUser.UserId);
-                return true;
+                    await _unitOfWork.CommitAsync();
+                    _logger.LogInformation("Updated UserRole {UserRoleId} by {UserId}", request.Id, _currentUser.UserId);
+                    return true;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {

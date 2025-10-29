@@ -1,4 +1,4 @@
-﻿using eDocCore.Domain.Entities;
+﻿using eDocCore.Domain;
 using eDocCore.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace eDocCore.Infrastructure.Persistence.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : class, IAuditableEntity
     {
         protected readonly ApplicationDbContext _context;
 
@@ -31,26 +31,25 @@ namespace eDocCore.Infrastructure.Persistence.Repositories
 
         public virtual async Task<T> AddAsync(T entity)
         {
+            var now = DateTimeOffset.UtcNow;
+
             if (entity.Id == Guid.Empty)
                 entity.Id = Guid.NewGuid();
 
             // only set Created when not provided
             if (entity.Created == default)
-                entity.Created = DateTimeOffset.UtcNow;
+                entity.Created = now;
 
-            entity.Modified = DateTimeOffset.UtcNow;
+            entity.Modified = now;
 
             await _context.Set<T>().AddAsync(entity);
-            // Defer SaveChanges to UnitOfWork.CommitAsync
             return entity;
         }
 
         public virtual async Task<T> UpdateAsync(T entity)
         {
-            // audit
             entity.Modified = DateTimeOffset.UtcNow;
 
-            // attach and mark modified, but do not overwrite immutable fields
             var entry = _context.Entry(entity);
             if (entry.State == EntityState.Detached)
             {
@@ -59,10 +58,8 @@ namespace eDocCore.Infrastructure.Persistence.Repositories
             }
 
             entry.State = EntityState.Modified;
-            entry.Property(e => e.Id).IsModified = false;
             entry.Property(e => e.Created).IsModified = false;
 
-            // Defer SaveChanges to UnitOfWork.CommitAsync
             return entity;
         }
 

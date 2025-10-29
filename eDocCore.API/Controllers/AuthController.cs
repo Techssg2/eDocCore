@@ -4,9 +4,11 @@ using eDocCore.Application.Common.Models;
 using eDocCore.Application.Features.Auth.DTOs.Request;
 using eDocCore.Application.Features.Auth.DTOs.Response;
 using eDocCore.Application.Features.Auth.Services;
+using eDocCore.Application.Features.Auth.Validators; // Added missing namespace
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using FluentValidation;
 
 namespace eDocCore.API.Controllers
 {
@@ -24,6 +26,18 @@ namespace eDocCore.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<ApiResult<string>>> Register([FromBody] RegisterUserRequest request, CancellationToken ct)
         {
+            // Validate request using FluentValidation
+            var validator = new RegisterUserRequestValidator();
+            var validationResult = validator.Validate(request);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(ApiResult<string>.Fail("Validation failed", 
+                    validationResult.Errors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}").ToList(), 
+                    traceId: HttpContext.TraceIdentifier));
+            }
+
+            // Call service to handle business logic
             var ok = await _authService.RegisterAsync(request, ct);
             if (!ok) return BadRequest(ApiResult<string>.Fail("Register failed", traceId: HttpContext.TraceIdentifier));
             return Ok(ApiResult<string>.Ok("Registered", traceId: HttpContext.TraceIdentifier));

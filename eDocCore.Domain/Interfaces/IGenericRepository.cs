@@ -1,5 +1,4 @@
-﻿using eDocCore.Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,7 +11,7 @@ namespace eDocCore.Domain.Interfaces
     /// Interface chung cho Repository Pattern, định nghĩa các thao tác CRUD cơ bản.
     /// </summary>
     /// <typeparam name="T">Một lớp kế thừa từ BaseEntity.</typeparam>
-    public interface IGenericRepository<T> where T : BaseEntity
+    public interface IGenericRepository<T> where T : class
     {
         // CRUD cơ bản (giữ nguyên để không phá vỡ tương thích)
         Task<T?> GetByIdAsync(Guid id);

@@ -1,7 +1,7 @@
 using AutoMapper;
 using eDocCore.API.FeatureTemplate.eDocCore.Application.Features.__FeatureName__.DTOs.Request;
-using eDocCore.API.FeatureTemplate.eDocCore.Domain.Entities.Partial;
-using eDocCore.Application.Features.Roles.DTOs.Request;
+using eDocCore.Domain.Entities;
+
 
 namespace eDocCore.API.FeatureTemplate.eDocCore.Application.Features.__FeatureName__.Mapping
 {

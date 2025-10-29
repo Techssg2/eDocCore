@@ -16,6 +16,3 @@ dotnet new edocfeature -n TênFeature -o ./ĐườngDẫnTớiThưMụcChứaFea
 dotnet new edocfeature --name {{NameFeature}} --output .
 
 dotnet new edocfeature --name UserRole --ModelName UserRole --output .
-
-
-dotnet new edocfeature --name UserRole --ModelName UserRole --output .

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace eDocCore.Domain.Entities;
 
-public partial class UserRole : IAuditableEntity
+public partial class Department : IAuditableEntity
 {
 
 }

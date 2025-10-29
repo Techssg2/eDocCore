@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using eDocCore.API.FeatureTemplate.eDocCore.Application.Features.__FeatureName__.DTOs;
 using eDocCore.API.FeatureTemplate.eDocCore.Application.Features.__FeatureName__.DTOs.Request;
-using eDocCore.API.FeatureTemplate.eDocCore.Domain.Entities.Partial;
 using eDocCore.API.FeatureTemplate.eDocCore.Domain.Interfaces.Extend;
 using eDocCore.Application.Common.Interfaces;
 using eDocCore.Application.Common.Models;
+using eDocCore.Domain.Entities;
 using eDocCore.Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
 namespace eDocCore.API.FeatureTemplate.eDocCore.Application.Features.__FeatureName__.Services
@@ -72,11 +73,16 @@ namespace eDocCore.API.FeatureTemplate.eDocCore.Application.Features.__FeatureNa
                 _logger.LogInformation("Updating __FeatureName__ {__FeatureName__Id} by {UserId}", request.Id, _currentUser.UserId);
                 var existing = await ___FeatureName__Repository.GetByIdAsync(request.Id);
                 _mapper.Map(request, existing);
-                await ___FeatureName__Repository.UpdateAsync(existing);
 
-                await _unitOfWork.CommitAsync();
-                _logger.LogInformation("Updated __FeatureName__ {__FeatureName__Id} by {UserId}", request.Id, _currentUser.UserId);
-                return true;
+                if (existing != null)
+                {
+                    await ___FeatureName__Repository.UpdateAsync(existing);
+                    await _unitOfWork.CommitAsync();
+                    _logger.LogInformation("Updated __FeatureName__ {__FeatureName__Id} by {UserId}", request.Id, _currentUser.UserId);
+                    return true;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {

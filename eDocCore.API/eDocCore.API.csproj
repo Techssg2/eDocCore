@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="FeatureTemplate\.template.config\template.json" />
   </ItemGroup>
 
@@ -28,7 +35,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Logs\" />
+	  <Folder Include="FeatureTemplate\eDocCore.Domain\fO\" />
 	</ItemGroup>
 
 </Project>

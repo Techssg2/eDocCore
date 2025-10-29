@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,30 +32,18 @@ namespace eDocCore.Application.Features.Auth.Services
 
         public async Task<bool> RegisterAsync(RegisterUserRequest request, CancellationToken ct = default)
         {
-            // check exists
-            var exists = await _userRepository.GetByLoginNameAsync(request.LoginName);
-            if (exists != null) throw new ConflictException("Login name already exists");
+            // Logic nghiệp vụ: Kiểm tra sự tồn tại của người dùng
+            await EnsureUserDoesNotExist(request.LoginName);
 
             await _unitOfWork.BeginTransactionAsync();
             try
             {
-                var user = new User
-                {
-                    LoginName = request.LoginName,
-                    Password = PasswordHasher.Hash(request.Password),
-                    FullName = request.FullName,
-                    Email = request.Email,
-                    IsActive = request.IsActive,
-                    Created = DateTimeOffset.UtcNow,
-                    Modified = DateTimeOffset.UtcNow
-                };
+                // Tạo người dùng
+                var user = CreateUser(request);
                 await _userRepository.AddAsync(user);
 
-                var roleDefault = await _roleRepository.FirstOrDefaultAsync(x => x.Name == "Member");
-                if (roleDefault == null) throw new NotFoundAppException("Default role 'Member' not found");
-
-                var userRole = new eDocCore.Domain.Entities.UserRole { UserId = user.Id, RoleId = roleDefault.Id };
-                await _userRole.AddAsync(userRole);
+                // Gán vai trò mặc định
+                await AssignDefaultRole(user.Id);
 
                 await _unitOfWork.CommitAsync();
                 return true;
@@ -65,6 +53,35 @@ namespace eDocCore.Application.Features.Auth.Services
                 await _unitOfWork.RollbackAsync();
                 throw;
             }
+        }
+
+        private async Task EnsureUserDoesNotExist(string loginName)
+        {
+            var exists = await _userRepository.GetByLoginNameAsync(loginName);
+            if (exists != null) throw new ConflictException("Login name already exists");
+        }
+
+        private User CreateUser(RegisterUserRequest request)
+        {
+            return new User
+            {
+                LoginName = request.LoginName,
+                Password = PasswordHasher.Hash(request.Password),
+                FullName = request.FullName,
+                Email = request.Email,
+                IsActive = request.IsActive,
+                Created = DateTimeOffset.UtcNow,
+                Modified = DateTimeOffset.UtcNow
+            };
+        }
+
+        private async Task AssignDefaultRole(Guid userId)
+        {
+            var roleDefault = await _roleRepository.FirstOrDefaultAsync(x => x.Name == "Member");
+            if (roleDefault == null) throw new NotFoundAppException("Default role 'Member' not found");
+
+            var userRole = new UserRole { UserId = userId, RoleId = roleDefault.Id };
+            await _userRole.AddAsync(userRole);
         }
 
         public async Task<LoginResponse?> LoginAsync(LoginRequest request, CancellationToken ct = default)

@@ -23,5 +23,7 @@ public partial class User
 
     public DateTimeOffset Modified { get; set; }
 
+    public virtual ICollection<UserDepartmentMapping> UserDepartmentMappings { get; set; } = new List<UserDepartmentMapping>();
+
     public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }

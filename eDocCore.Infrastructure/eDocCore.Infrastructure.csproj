@@ -22,6 +22,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\eDocCore.Application\eDocCore.Application.csproj" />
+		<ProjectReference Include="..\eDocCore.Domain\eDocCore.Domain.csproj" />
 	</ItemGroup>
 
   <ItemGroup>
