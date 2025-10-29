@@ -1,8 +1,6 @@
-using eDocCore.API.FeatureTemplate.eDocCore.Application.Features.UserDepartmentMapping.DTOs;
-using eDocCore.API.FeatureTemplate.eDocCore.Application.Features.UserDepartmentMapping.Services;
 using eDocCore.Application.Common.Models;
-using eDocCore.Application.Features.Roles.DTOs;
-using eDocCore.Application.Features.Roles.Services;
+using eDocCore.Application.Features.UserDepartmentMappings.DTOs;
+using eDocCore.Application.Features.UserDepartmentMappings.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eDocCore.API.FeatureTemplate.eDocCore.API.Controllers

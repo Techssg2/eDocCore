@@ -1,8 +1,6 @@
-using eDocCore.API.FeatureTemplate.eDocCore.Application.Features.__FeatureName__.DTOs;
-using eDocCore.API.FeatureTemplate.eDocCore.Application.Features.__FeatureName__.Services;
 using eDocCore.Application.Common.Models;
-using eDocCore.Application.Features.Roles.DTOs;
-using eDocCore.Application.Features.Roles.Services;
+using eDocCore.Application.Features.__FeatureName__s.DTOs;
+using eDocCore.Application.Features.__FeatureName__s.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eDocCore.API.FeatureTemplate.eDocCore.API.Controllers
