@@ -28,4 +28,10 @@ namespace eDocCore.Application.Common
         public static ResultDTO Failure(HttpStatusCode statusCode, string message, string? traceId = null) =>
             new() { IsSuccess = false, StatusCode = (HttpStatusCode)statusCode, Message = message, TraceId = traceId };
     }
+
+    public class ArrayResultDTO
+    {
+        public int Count { get; set; } = 0;
+        public object Data { get; set; } = new object { };
+    }
 }

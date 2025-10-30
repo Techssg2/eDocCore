@@ -1,12 +1,13 @@
 ﻿using eDocCore.API.Middlewares;
 using eDocCore.Application;
 using eDocCore.Infrastructure;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Serilog;
 using Serilog.Events;
-using FluentValidation.AspNetCore;
+using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,6 +79,25 @@ builder.Services.AddCors(options =>
         b => b.AllowAnyHeader()
               .AllowAnyOrigin()
               .AllowAnyMethod());
+});
+
+builder.Services.AddRouting(options =>
+{
+    // Đặt tất cả các URL route thành chữ thường
+    options.LowercaseUrls = true;
+
+    // Tùy chọn: Đặt tên hành động thành chữ thường
+    options.LowercaseQueryStrings = false; // Thường giữ nguyên 
+});
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+// Xóa trả về type dư thừa
+builder.Services.Configure<ProblemDetailsOptions>(options =>
+{
+    options.CustomizeProblemDetails = context =>
+    {
+        context.ProblemDetails.Type = null;
+    };
 });
 
 var app = builder.Build();

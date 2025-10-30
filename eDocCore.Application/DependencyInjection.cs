@@ -3,6 +3,7 @@ using eDocCore.Application.Features.Auth.DTOs.Request;
 using eDocCore.Application.Features.Auth.Services;
 using eDocCore.Application.Features.Auth.Validators;
 using eDocCore.Application.Features.Roles.Services;
+using eDocCore.Application.Features.Users.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,6 +40,11 @@ namespace eDocCore.Application
             // Auth services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IValidator<RegisterUserRequest>, RegisterUserRequestValidator>();
+
+
+            #region User Service
+            services.AddScoped<IUserService, UserService>();
+            #endregion
 
             return services;
         }

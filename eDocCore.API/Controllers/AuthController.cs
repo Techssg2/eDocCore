@@ -39,7 +39,6 @@ namespace eDocCore.API.Controllers
         {
             // Manually validate the request using FluentValidation
             var validationResult = await _validatorAuth.ValidateAsync(request, ct);
-
             if (!validationResult.IsValid)
             {
                 // Collect validation errors and return a BadRequest response
@@ -53,13 +52,13 @@ namespace eDocCore.API.Controllers
             try
             {
                 var result = await _authService.RegisterAsync(request, ct);
-                if (!result)
+                if (result == null)
                 {
                     return BadRequest(ResultDTO.Failure(HttpStatusCode.InternalServerError, "Registration failed.", HttpContext.TraceIdentifier));
                 }
 
                 _logger.LogInformation("Registration successful for user: {LoginName}", request.LoginName);
-                return Ok(ResultDTO.Success("Registration successful.", HttpContext.TraceIdentifier));
+                return Ok(ResultDTO<object>.Success(result, "Registration successful.", HttpContext.TraceIdentifier));
             }
             catch (BusinessRuleException ex)
             {

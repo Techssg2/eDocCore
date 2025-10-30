@@ -20,7 +20,7 @@ namespace eDocCore.Application.Features.Auth.Validators
 
             RuleFor(x => x.LoginName)
                 .NotEmpty().WithMessage("Login name is required.")
-                .Must(ExistLoginName).WithMessage(x => $"Login name {x.LoginName} already exists.");
+                .Must(ExistLoginName).WithMessage("Login name already exists.");
 
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage("Email is required.")
@@ -41,6 +41,7 @@ namespace eDocCore.Application.Features.Auth.Validators
 
         private bool ExistLoginName(string loginName)
         {
+            // Synchronous validation by preloading data
             var user = _userService.GetUserByLoginName(loginName).Result;
             return user == null;
         }

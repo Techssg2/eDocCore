@@ -1,16 +1,20 @@
-﻿using eDocCore.Application.Common;
+﻿using AutoMapper;
+using eDocCore.Application.Common;
 using eDocCore.Application.Common.Exceptions;
 using eDocCore.Application.Common.Interfaces;
 using eDocCore.Application.Common.Security;
 using eDocCore.Application.Features.Auth.DTOs.Request;
 using eDocCore.Application.Features.Auth.DTOs.Response;
+using eDocCore.Application.Features.UserRoles.DTOs;
 using eDocCore.Application.Features.UserRoles.Services;
+using eDocCore.Application.Features.Users.DTOs;
 using eDocCore.Domain.Entities;
 using eDocCore.Domain.Interfaces;
 using eDocCore.Domain.Interfaces.Extend;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,18 +26,20 @@ namespace eDocCore.Application.Features.Auth.Services
         private readonly IRoleRepository _roleRepository;
         private readonly IGenericRepository<UserRole> _userRole;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
         private readonly ILogger<AuthService> _logger;
 
-        public AuthService(IUserRepository userRepository, IGenericRepository<eDocCore.Domain.Entities.UserRole> userRole, IRoleRepository roleRepository, IUnitOfWork unitOfWork, ILogger<AuthService> logger)
+        public AuthService(IUserRepository userRepository, IGenericRepository<eDocCore.Domain.Entities.UserRole> userRole, IRoleRepository roleRepository, IUnitOfWork unitOfWork, ILogger<AuthService> logger, IMapper mapper)
         {
             _userRepository = userRepository;
             _userRole = userRole;
             _roleRepository = roleRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _mapper = mapper;
         }
 
-        public async Task<bool> RegisterAsync(RegisterUserRequest request, CancellationToken ct = default)
+        public async Task<UserDTO?> RegisterAsync(RegisterUserRequest request, CancellationToken ct = default)
         {
             try
             {
@@ -44,20 +50,20 @@ namespace eDocCore.Application.Features.Auth.Services
                     Password = PasswordHasher.Hash(request.Password),
                     FullName = request.FullName,
                     Email = request.Email,
-                    IsActive = request.IsActive,
+                    IsActive = true,
                 }; ;
                 await _userRepository.AddAsync(user);
 
                 // Gán vai trò mặc định
                 await AssignDefaultRole(user.Id);
                 await _unitOfWork.CommitAsync();
-                return true;
+                return _mapper.Map<UserDTO>(user);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error registering user");
                 await _unitOfWork.RollbackAsync();
-                return false;
+                return null;
             }
         }
 
