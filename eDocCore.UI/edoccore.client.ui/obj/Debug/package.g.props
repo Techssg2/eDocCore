@@ -26,12 +26,11 @@
     <PackageJsonDependenciesDndKitSortable Condition="$(PackageJsonDependenciesDndKitSortable) == ''">^7.0.2</PackageJsonDependenciesDndKitSortable>
     <PackageJsonDependenciesDndKitUtilities Condition="$(PackageJsonDependenciesDndKitUtilities) == ''">^3.2.2</PackageJsonDependenciesDndKitUtilities>
     <PackageJsonDependenciesReduxjsToolkit Condition="$(PackageJsonDependenciesReduxjsToolkit) == ''">^1.9.5</PackageJsonDependenciesReduxjsToolkit>
-    <PackageJsonDependenciesTypesReactRedux Condition="$(PackageJsonDependenciesTypesReactRedux) == ''">^7.1.34</PackageJsonDependenciesTypesReactRedux>
-    <PackageJsonDependenciesAntd Condition="$(PackageJsonDependenciesAntd) == ''">^5.27.6</PackageJsonDependenciesAntd>
+    <PackageJsonDependenciesAntd Condition="$(PackageJsonDependenciesAntd) == ''">^5.8.3</PackageJsonDependenciesAntd>
     <PackageJsonDependenciesAntdImgCrop Condition="$(PackageJsonDependenciesAntdImgCrop) == ''">^4.12.2</PackageJsonDependenciesAntdImgCrop>
     <PackageJsonDependenciesAxios Condition="$(PackageJsonDependenciesAxios) == ''">^1.4.0</PackageJsonDependenciesAxios>
     <PackageJsonDependenciesBraftEditor Condition="$(PackageJsonDependenciesBraftEditor) == ''">^2.3.9</PackageJsonDependenciesBraftEditor>
-    <PackageJsonDependenciesDayjs Condition="$(PackageJsonDependenciesDayjs) == ''">^1.11.9</PackageJsonDependenciesDayjs>
+    <PackageJsonDependenciesDayjs Condition="$(PackageJsonDependenciesDayjs) == ''">1.11.9</PackageJsonDependenciesDayjs>
     <PackageJsonDependenciesFileSaver Condition="$(PackageJsonDependenciesFileSaver) == ''">^2.0.5</PackageJsonDependenciesFileSaver>
     <PackageJsonDependenciesRcUtil Condition="$(PackageJsonDependenciesRcUtil) == ''">^5.35.0</PackageJsonDependenciesRcUtil>
     <PackageJsonDependenciesReact Condition="$(PackageJsonDependenciesReact) == ''">18.2.0</PackageJsonDependenciesReact>
@@ -40,8 +39,8 @@
     <PackageJsonDependenciesReactDraggable Condition="$(PackageJsonDependenciesReactDraggable) == ''">^4.4.5</PackageJsonDependenciesReactDraggable>
     <PackageJsonDependenciesReactErrorBoundary Condition="$(PackageJsonDependenciesReactErrorBoundary) == ''">^4.0.4</PackageJsonDependenciesReactErrorBoundary>
     <PackageJsonDependenciesReactLazyLoadImageComponent Condition="$(PackageJsonDependenciesReactLazyLoadImageComponent) == ''">^1.6.0</PackageJsonDependenciesReactLazyLoadImageComponent>
-    <PackageJsonDependenciesReactRedux Condition="$(PackageJsonDependenciesReactRedux) == ''">^8.1.1</PackageJsonDependenciesReactRedux>
-    <PackageJsonDependenciesReactRouterDom Condition="$(PackageJsonDependenciesReactRouterDom) == ''">^6.14.0</PackageJsonDependenciesReactRouterDom>
+    <PackageJsonDependenciesReactRedux Condition="$(PackageJsonDependenciesReactRedux) == ''">8.1.1</PackageJsonDependenciesReactRedux>
+    <PackageJsonDependenciesReactRouterDom Condition="$(PackageJsonDependenciesReactRouterDom) == ''">6.14.0</PackageJsonDependenciesReactRouterDom>
     <PackageJsonDependenciesReactScripts Condition="$(PackageJsonDependenciesReactScripts) == ''">5.0.1</PackageJsonDependenciesReactScripts>
     <PackageJsonDependenciesReduxLogger Condition="$(PackageJsonDependenciesReduxLogger) == ''">^3.0.6</PackageJsonDependenciesReduxLogger>
     <PackageJsonDependenciesReduxSaga Condition="$(PackageJsonDependenciesReduxSaga) == ''">1.2.3</PackageJsonDependenciesReduxSaga>

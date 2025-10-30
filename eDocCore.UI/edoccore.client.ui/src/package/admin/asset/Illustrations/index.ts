@@ -2,7 +2,8 @@ import DrawKitVectorIllustrationTeamWork4 from "./DrawKitVectorIllustrationProje
 import Illustration7 from "./search-hacker.svg";
 import Illustration1 from "./concept-of-data-analysis-and-maintenance.svg";
 import Illustration2 from "./man-developing-website-on-desk.svg";
-import Illustration3 from "./cloud-storage.svg";
+//import Illustration3 from "./cloud-storage.svg";
+import Illustration3 from "./core.png";
 import Illustration4 from "./social-media-users.svg";
 import Illustration5 from "./concept-of-website-recovery.svg";
 import Illustration6 from "./design-and-development-process.svg";
