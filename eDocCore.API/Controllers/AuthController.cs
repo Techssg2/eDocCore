@@ -1,4 +1,6 @@
-﻿using eDocCore.Application.Common.Exceptions;
+﻿using Azure.Core;
+using eDocCore.Application.Common;
+using eDocCore.Application.Common.Exceptions;
 using eDocCore.Application.Common.Models;
 using eDocCore.Application.Features.Auth.DTOs.Request;
 using eDocCore.Application.Features.Auth.DTOs.Response;
@@ -7,6 +9,8 @@ using eDocCore.Application.Features.Auth.Validators; // Added missing namespace
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Net;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,92 +23,54 @@ namespace eDocCore.API.Controllers
     {
         private readonly IAuthService _authService;
         private readonly ILogger<AuthController> _logger;
+        private readonly IValidator<RegisterUserRequest> _validatorAuth;
 
-        public AuthController(IAuthService authService, ILogger<AuthController> logger)
+        public AuthController(IAuthService authService, ILogger<AuthController> logger, IValidator<RegisterUserRequest> validatorAuth)
         {
             _authService = authService;
             _logger = logger;
+            _validatorAuth = validatorAuth;
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<ApiResult<string>>> Register([FromBody] RegisterUserRequest request, CancellationToken ct)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Register([FromBody] RegisterUserRequest request, CancellationToken ct)
         {
-            //1. Validate request using FluentValidation
-            var validator = new RegisterUserRequestValidator();
-            var validationResult = validator.Validate(request);
+            // Manually validate the request using FluentValidation
+            var validationResult = await _validatorAuth.ValidateAsync(request, ct);
 
             if (!validationResult.IsValid)
             {
-                // Trả về lỗi nếu validation thất bại
-                return BadRequest(ApiResult<string>.Fail(
-                    "Validation failed",
-                    validationResult.Errors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}").ToList(),
-                    traceId: HttpContext.TraceIdentifier));
+                // Collect validation errors and return a BadRequest response
+                var errorMessages = string.Join(" | ", validationResult.Errors.Select(e => e.ErrorMessage));
+                return BadRequest(ResultDTO.Failure(HttpStatusCode.BadRequest, errorMessages, HttpContext.TraceIdentifier));
             }
 
-            //2. Call service to handle business logic
+            // Proceed with registration logic if validation passes
+            _logger.LogInformation("Processing registration for user: {LoginName}", request.LoginName);
+
             try
             {
                 var result = await _authService.RegisterAsync(request, ct);
-                if (!result.IsSuccess)
+                if (!result)
                 {
-                    return BadRequest(ApiResult<string>.Fail(
-                        result.Message,
-                        result.ErrorMessages,
-                        traceId: HttpContext.TraceIdentifier));
+                    return BadRequest(ResultDTO.Failure(HttpStatusCode.InternalServerError, "Registration failed.", HttpContext.TraceIdentifier));
                 }
 
-                return Ok(ApiResult<string>.Ok(
-                    null,
-                    result.Message,
-                    traceId: HttpContext.TraceIdentifier));
+                _logger.LogInformation("Registration successful for user: {LoginName}", request.LoginName);
+                return Ok(ResultDTO.Success("Registration successful.", HttpContext.TraceIdentifier));
             }
             catch (BusinessRuleException ex)
             {
-                // Xử lý lỗi nghiệp vụ
-                _logger.LogError($"Business rule error: {ex.Message}");
-                return BadRequest(ApiResult<string>.Fail(
-                    ex.Message,
-                    traceId: HttpContext.TraceIdentifier));
+                _logger.LogError(ex, "Business rule error during registration for user: {LoginName}", request.LoginName);
+                return BadRequest(ResultDTO.Failure(HttpStatusCode.BadRequest, ex.Message, HttpContext.TraceIdentifier));
             }
             catch (Exception ex)
             {
-                // Xử lý lỗi không mong muốn
-                _logger.LogError($"Unexpected error: {ex.Message}");
-                return StatusCode(500, ApiResult<string>.Fail(
-                    "An unexpected error occurred",
-                    traceId: HttpContext.TraceIdentifier));
+                _logger.LogError(ex, "Unexpected error during registration for user: {LoginName}", request.LoginName);
+                return StatusCode(StatusCodes.Status500InternalServerError, ResultDTO.Failure(HttpStatusCode.InternalServerError, ex.Message, HttpContext.TraceIdentifier));
             }
-        }
-
-        [HttpPost("login")]
-        public async Task<ActionResult<ApiResult<LoginResponse>>> Login([FromBody] LoginRequest request, CancellationToken ct)
-        {
-            var result = await _authService.LoginAsync(request, ct);
-            if (result == null) return Unauthorized(ApiResult<LoginResponse>.Fail("Invalid credentials", traceId: HttpContext.TraceIdentifier));
-            return Ok(ApiResult<LoginResponse>.Ok(result, traceId: HttpContext.TraceIdentifier));
-        }
-
-        [Authorize]
-        [HttpPost("change-password")]
-        public async Task<ActionResult<ApiResult<string>>> ChangePassword([FromBody] ChangePasswordRequest request, CancellationToken ct)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
-            var ok = await _authService.ChangePasswordAsync(userId!, request, ct);
-            return Ok(ApiResult<string>.Ok("Password changed", traceId: HttpContext.TraceIdentifier));
-        }
-
-        [Authorize]
-        [HttpGet("me")]
-        public async Task<ActionResult<ApiResult<CurrentUserResponse>>> Me(CancellationToken ct)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized(ApiResult<CurrentUserResponse>.Fail("Unauthorized", traceId: HttpContext.TraceIdentifier));
-
-            var user = await _authService.GetCurrentUserAsync(userId, ct);
-            if (user == null) return NotFound(ApiResult<CurrentUserResponse>.Fail("Not found", traceId: HttpContext.TraceIdentifier));
-            return Ok(ApiResult<CurrentUserResponse>.Ok(user, traceId: HttpContext.TraceIdentifier));
         }
     }
 }

@@ -8,9 +8,6 @@ namespace eDocCore.Application.Features.Auth.Services
 {
     public interface IAuthService
     {
-        Task<ResultDTO<bool>> RegisterAsync(RegisterUserRequest request, CancellationToken ct = default);
-        Task<LoginResponse?> LoginAsync(LoginRequest request, CancellationToken ct = default);
-        Task<bool> ChangePasswordAsync(string userId, ChangePasswordRequest request, CancellationToken ct = default);
-        Task<CurrentUserResponse?> GetCurrentUserAsync(string userId, CancellationToken ct = default);
+        Task<bool> RegisterAsync(RegisterUserRequest request, CancellationToken ct = default);
     }
 }

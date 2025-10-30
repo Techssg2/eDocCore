@@ -13,6 +13,7 @@ using eDocCore.Application.Common.Exceptions;
 using Microsoft.Extensions.Logging;
 using eDocCore.Application.Common.Interfaces;
 using eDocCore.Application.Features.Roles.DTOs.Request;
+using System.Data.Common;
 
 namespace eDocCore.Application.Features.Roles.Services
 {
@@ -36,6 +37,10 @@ namespace eDocCore.Application.Features.Roles.Services
             _logger = logger;
             _validator = validator;
             _currentUser = currentUser;
+        }
+        public async Task<Role?> GetRoleByNameAsync(string name)
+        {
+            return await _roleRepository.FirstOrDefaultAsync(x => x.Name.Equals(name));
         }
 
         public async Task<IReadOnlyList<RoleDto>> GetAllAsync()

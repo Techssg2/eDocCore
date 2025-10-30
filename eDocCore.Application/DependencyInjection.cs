@@ -1,15 +1,17 @@
-﻿using System;
+﻿using eDocCore.Application.Behaviours;
+using eDocCore.Application.Features.Auth.DTOs.Request;
+using eDocCore.Application.Features.Auth.Services;
+using eDocCore.Application.Features.Auth.Validators;
+using eDocCore.Application.Features.Roles.Services;
+using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using eDocCore.Application.Behaviours;
-using eDocCore.Application.Features.Roles.Services;
-using eDocCore.Application.Features.Auth.Services;
-using FluentValidation;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace eDocCore.Application
 {
@@ -29,12 +31,14 @@ namespace eDocCore.Application
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             });
 
+
             // Application services (không CQRS)
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRoleValidator, RoleValidator>();
 
             // Auth services
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IValidator<RegisterUserRequest>, RegisterUserRequestValidator>();
 
             return services;
         }
