@@ -1,8 +1,10 @@
 ﻿using eDocCore.API.Middlewares;
 using eDocCore.Application;
+using eDocCore.Application.Common;
 using eDocCore.Infrastructure;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
@@ -90,7 +92,7 @@ builder.Services.AddRouting(options =>
     options.LowercaseQueryStrings = false; // Thường giữ nguyên 
 });
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
+builder.Services.Configure<AppSettingDTO>(builder.Configuration.GetSection("AppSettings"));
 // Xóa trả về type dư thừa
 builder.Services.Configure<ProblemDetailsOptions>(options =>
 {

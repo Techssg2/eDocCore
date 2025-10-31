@@ -3,6 +3,7 @@ using eDocCore.Application.Common;
 using eDocCore.Application.Common.Exceptions;
 using eDocCore.Application.Common.Interfaces;
 using eDocCore.Application.Common.Security;
+using eDocCore.Application.Features.Auth.DTOs;
 using eDocCore.Application.Features.Auth.DTOs.Request;
 using eDocCore.Application.Features.Auth.DTOs.Response;
 using eDocCore.Application.Features.UserRoles.DTOs;
@@ -11,10 +12,18 @@ using eDocCore.Application.Features.Users.DTOs;
 using eDocCore.Domain.Entities;
 using eDocCore.Domain.Interfaces;
 using eDocCore.Domain.Interfaces.Extend;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mail;
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,8 +37,10 @@ namespace eDocCore.Application.Features.Auth.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<AuthService> _logger;
+        private readonly IOptionsMonitor<AppSettingDTO> _optionsMonitor;
+        private readonly int ExpireTime = 8;
 
-        public AuthService(IUserRepository userRepository, IGenericRepository<eDocCore.Domain.Entities.UserRole> userRole, IRoleRepository roleRepository, IUnitOfWork unitOfWork, ILogger<AuthService> logger, IMapper mapper)
+        public AuthService(IUserRepository userRepository, IGenericRepository<UserRole> userRole, IRoleRepository roleRepository, IUnitOfWork unitOfWork, ILogger<AuthService> logger, IMapper mapper, IOptionsMonitor<AppSettingDTO> optionsMonitor)
         {
             _userRepository = userRepository;
             _userRole = userRole;
@@ -37,6 +48,7 @@ namespace eDocCore.Application.Features.Auth.Services
             _unitOfWork = unitOfWork;
             _logger = logger;
             _mapper = mapper;
+            _optionsMonitor = optionsMonitor;
         }
 
         public async Task<UserDTO?> RegisterAsync(RegisterUserRequest request, CancellationToken ct = default)
@@ -51,7 +63,7 @@ namespace eDocCore.Application.Features.Auth.Services
                     FullName = request.FullName,
                     Email = request.Email,
                     IsActive = true,
-                }; ;
+                };
                 await _userRepository.AddAsync(user);
 
                 // Gán vai trò mặc định
@@ -76,19 +88,62 @@ namespace eDocCore.Application.Features.Auth.Services
             await _userRole.AddAsync(userRole);
         }
 
-        /*public async Task<LoginResponse?> LoginAsync(LoginRequest request, CancellationToken ct = default)
+        public async Task<ResultDTO<TokenDTO>> Login(LoginRequest request, CancellationToken ct = default)
         {
             var user = await _userRepository.GetByLoginNameAsync(request.LoginName);
-            if (user == null || string.IsNullOrEmpty(user.Password) || !PasswordHasher.Verify(user.Password, request.Password))
+            if (user == null)
             {
-                return null;
+                return ResultDTO<TokenDTO>.Failure(System.Net.HttpStatusCode.Unauthorized, "Invalid login credentials.");
             }
+
             if (!user.IsActive)
             {
-                throw new BusinessRuleException("User is inactive");
+                return ResultDTO<TokenDTO>.Failure(System.Net.HttpStatusCode.Forbidden, "User account is inactive.");
             }
-            var roles = await _userRepository.GetRoleNamesAsync(user.Id);
-            return _jwt.GenerateToken(user, roles);
-        }*/
+
+            if (!PasswordHasher.Verify(user.Password ?? "", request.Password))
+            {
+                return ResultDTO<TokenDTO>.Failure(System.Net.HttpStatusCode.Unauthorized, "Invalid login credentials.");
+            }
+            // viết code sinh token ở đây (nếu có)
+
+            var generateData = GenerateToken(user);
+            return ResultDTO<TokenDTO>.Success(generateData); 
+        }
+
+        private TokenDTO GenerateToken(User user)
+        {
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+            var secretKeyBytes = Encoding.UTF8.GetBytes(_optionsMonitor.CurrentValue.SecretKey);
+
+            var tokenDescription = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] {
+                    new Claim("UserId", user.Id.ToString()),
+                    new Claim("FullName", user.FullName ?? ""),
+                    new Claim("LoginName", user.LoginName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                }),
+                Expires = DateTime.UtcNow.AddHours(ExpireTime),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha512)
+            };
+
+            var token = jwtTokenHandler.CreateToken(tokenDescription);
+            var accessToken = jwtTokenHandler.WriteToken(token);
+            var refreshToken = GenerateRefreshToken();
+
+            return new TokenDTO
+            {
+                AccessToken = accessToken
+            };
+        }
+
+        private static string GenerateRefreshToken()
+        {
+            var random = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(random);
+            return Convert.ToBase64String(random);
+        }
     }
 }

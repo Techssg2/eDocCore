@@ -36,7 +36,8 @@ namespace eDocCore.Application.Features.Auth.Validators
 
             RuleFor(x => x)
             .Must(x => ExistRoleMember("Member"))
-                .WithMessage("Role 'Member' does not exist.");
+                .WithMessage("Role 'Member' does not exist.")
+                .WithName("OtherErrors");
         }
 
         private bool ExistLoginName(string loginName)

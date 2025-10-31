@@ -40,7 +40,7 @@ namespace eDocCore.Application
             // Auth services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IValidator<RegisterUserRequest>, RegisterUserRequestValidator>();
-
+            services.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
 
             #region User Service
             services.AddScoped<IUserService, UserService>();
